@@ -62,6 +62,12 @@ const RGBColor& Image::operator()( uint x, uint y ) const {
     return pixels[y*width_+x];
 }
 
+void Image::operator()(uint x, uint y, const RGBColor& c ) const {
+    rt_assert(x < width_ && y < height_) << "Coordinates [" << x << "," << y << "] are out of bounds of an image [" << width_ << "," << height_ << "]";
+    pixels[y*width_+x].r = c.r;
+    pixels[y*width_+x].g = c.g;
+    pixels[y*width_+x].b = c.b;
+}
 
 void Image::clear( const RGBColor& color ) {
     for (uint i=0; i<width_*height_; ++i)

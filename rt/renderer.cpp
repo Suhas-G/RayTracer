@@ -23,7 +23,13 @@ namespace rt {
 
 void Renderer::test_render1(Image& img) {
     CG_UNUSED(img);
-    /* TODO */ NOT_IMPLEMENTED;
+    const auto width = img.width();
+    const auto height = img.height();
+    for (rt::uint x = 0; x < width; x++) {
+        for (rt::uint y = 0; y < height; y++) {
+            img(x, y, a1computeColor(x, y, width, height));
+        }
+    }
 }
 }
 
