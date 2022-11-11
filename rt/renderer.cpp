@@ -47,7 +47,7 @@ void Renderer::test_render2(Image& img) {
             ndcy = (y + 0.5f) / height;
             sscx = (ndcx * 2) - 1;
             sscy = (ndcy * 2) - 1;
-            img(x, y, a2computeColor(cam->getPrimaryRay(sscx, sscy)));
+            img(x, height - y - 1, a2computeColor(cam->getPrimaryRay(sscx, sscy)));
         }
     }
 }

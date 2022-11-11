@@ -16,7 +16,7 @@ PerspectiveCamera::PerspectiveCamera(const Point& center, const Vector& forward,
 
 Ray PerspectiveCamera::getPrimaryRay(float x, float y) const {
     float f = (1/tangentHorizontalOpeningAngle);
-    Vector direction(((forward * f) + (x * left) + (-y * up)));
+    Vector direction(((forward * f) + (-x * left) + (y * up)));
     return Ray(center, direction.normalize());
 }
 

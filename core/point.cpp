@@ -45,4 +45,8 @@ Point max(const Point& a, const Point& b) {
     return Point(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z));
 }
 
+std::ostream &operator<<(std::ostream &os, Point const &p) { 
+    return os << "x: " << p.x << " y: " << p.y << " z: " << p.z;
+}
+
 }
