@@ -10,15 +10,15 @@ RGBColor::RGBColor(const HomogeneousCoord& coord)
 }
 
 RGBColor RGBColor::operator + (const RGBColor& c) const {
-    return RGBColor(rt::clamp01(r + c.r), rt::clamp01(g + c.g), rt::clamp01(b + c.b));
+    return RGBColor(r + c.r, g + c.g, b + c.b);
 }
 
 RGBColor RGBColor::operator - (const RGBColor& c) const {
-    return RGBColor(rt::clamp01(r - c.r), rt::clamp01(g - c.g), rt::clamp01(b - c.b));
+    return RGBColor(r - c.r, g - c.g, b - c.b);
 }
 
 RGBColor RGBColor::operator * (const RGBColor& c) const {
-    return RGBColor(rt::clamp01(r * c.r), rt::clamp01(g * c.g), rt::clamp01(b * c.b));
+    return RGBColor(r * c.r, g * c.g, b * c.b);
 }
 
 bool RGBColor::operator == (const RGBColor& c) const {
@@ -46,7 +46,7 @@ float RGBColor::luminance() const {
 }
 
 RGBColor operator * (float scalar, const RGBColor& c) {
-    return RGBColor(rt::clamp01(scalar * c.r), rt::clamp01(scalar * c.g), rt::clamp01(scalar * c.b));
+    return RGBColor(scalar * c.r, scalar * c.g, scalar * c.b);
 }
 
 RGBColor operator * (const RGBColor& c, float scalar) {
