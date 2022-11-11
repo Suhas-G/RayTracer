@@ -4,13 +4,13 @@
 
 namespace rt {
 
-Ray::Ray(const Point& o, const Vector& d)
+Ray::Ray(const Point& o, const Vector& d): o(o), d(d)
 {
     rt_assert(d != Vector::rep(0.0f));
 }
 
 Point Ray::getPoint(float distance) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return o + distance * d;
 }
 
 }

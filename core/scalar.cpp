@@ -1,4 +1,5 @@
 #include <cmath>
+#include <algorithm>
 
 namespace rt {
 
@@ -14,6 +15,10 @@ float absfractional(float f) {
     if (fr >= 1.0f) //can happed due to epsilon errors
         return 0.0f;
     return fr;
+}
+
+float clamp01(const float &x) {
+    return std::max(std::min(x, 1.0f), 0.0f); 
 }
 
 }

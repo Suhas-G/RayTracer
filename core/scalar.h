@@ -41,8 +41,7 @@ static const float pi = 3.141592f;
 
 typedef unsigned int uint;
 
-float clamp01(const float &x) {return std::max(std::min(x, 1.0f), 0.0f); }
-
+float clamp01(const float &x);
 }
 
 #endif
