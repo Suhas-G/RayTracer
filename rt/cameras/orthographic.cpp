@@ -10,13 +10,6 @@ OrthographicCamera::OrthographicCamera(const Point& center, const Vector& forwar
 }
 
 Ray OrthographicCamera::getPrimaryRay(float x, float y) const {
-    // -x , -y, forward
-    // x, y, forward
-    // x, y. -forward
-    // x, -y, forward
-    // -x, y, forward - produces upside down
-    // return Ray(((((-x * scaleX / 2) * left) + ((-y * scaleY / 2) * up)) + center), -forward.normalize());
-    // return Ray(((((-x * scaleX / 2) * left) + ((-y * scaleY / 2) * up)) + center), forward.normalize());
     return Ray(((((-x * scaleX / 2) * left) + ((y * scaleY / 2) * up)) + center), forward.normalize());
 }
 

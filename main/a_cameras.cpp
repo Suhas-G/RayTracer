@@ -6,6 +6,8 @@
 #include <rt/ray.h>
 #include <rt/cameras/perspective.h>
 #include <rt/cameras/orthographic.h>
+#include <rt/cameras/fisheye.h>
+#include <rt/cameras/environment.h>
 #include <iostream>
 #include <rt/renderer.h>
 
@@ -53,4 +55,14 @@ void a_cameras() {
     Renderer r2(&ocam,0);
     r2.test_render2(img);
     img.writeEXR("a1-4.exr");
+
+    FisheyeCamera fcam(Point(0, 0, 0), Vector(0.1f, 0.1f, 1), Vector(0.2f, 1.0f, 0.2f), pi * 0.9f);
+    Renderer r3(&fcam,0);
+    r3.test_render2(img);
+    img.writeEXR("a1-5.exr");
+
+    EnvironmentCamera ecam(Point(0, 0, 0), Vector(0.1f, 0.1f, 1), Vector(0.2f, 1.0f, 0.2f), pi, pi);
+    Renderer r4(&ecam,0);
+    r4.test_render2(img);
+    img.writeEXR("a1-6.exr");
 }
