@@ -7,6 +7,8 @@ set(MY_ADDITIONAL_SOURCES
     core/vector.cpp
     rt/cameras/orthographic.cpp
     rt/cameras/perspective.cpp
+    rt/cameras/fisheye.cpp
+    rt/cameras/environment.cpp
     rt/ray.cpp
     rt/renderer.cpp
 )
@@ -37,6 +39,8 @@ set(ASSIGNMENT_SOURCES
     rt/cameras/camera.h
     rt/cameras/orthographic.h
     rt/cameras/perspective.h
+    rt/cameras/fisheye.h
+    rt/cameras/environment.h
     rt/ray.h
     rt/renderer.h
     ${MY_ADDITIONAL_SOURCES}

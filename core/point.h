@@ -23,6 +23,7 @@ public:
 
     bool operator==(const Point& b) const;
     bool operator!=(const Point& b) const;
+    friend std::ostream& operator<<(std::ostream& os, const Point& p);
 
 };
 

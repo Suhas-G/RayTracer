@@ -19,6 +19,12 @@ public:
 
     virtual Ray getPrimaryRay(float x, float y) const;
 private:
+    Point center;
+    Vector forward;
+    Vector up;
+    Vector left;
+    float scaleX;
+    float scaleY;
 };
 
 }

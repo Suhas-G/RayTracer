@@ -21,6 +21,8 @@ public:
     RGBColor& operator()(uint x, uint y);
     const RGBColor& operator()(uint x, uint y) const;
 
+    void operator()(uint x, uint y, const RGBColor& c) const;
+
     void clear(const RGBColor& color);
 
     void writePNG(const std::string& filename);

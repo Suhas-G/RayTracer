@@ -41,6 +41,7 @@ static const float pi = 3.141592f;
 
 typedef unsigned int uint;
 
+float clamp01(const float &x);
 }
 
 #endif

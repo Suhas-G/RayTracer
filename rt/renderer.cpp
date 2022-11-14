@@ -2,6 +2,7 @@
 #include <core/image.h>
 #include <rt/renderer.h>
 #include <rt/ray.h>
+#include <rt/cameras/camera.h>
 #include <iostream>
 
 namespace rt {
@@ -22,8 +23,13 @@ rt::RGBColor a1computeColor(rt::uint x, rt::uint y, rt::uint width, rt::uint hei
 namespace rt {
 
 void Renderer::test_render1(Image& img) {
-    CG_UNUSED(img);
-    /* TODO */ NOT_IMPLEMENTED;
+    const auto width = img.width();
+    const auto height = img.height();
+    for (rt::uint x = 0; x < width; x++) {
+        for (rt::uint y = 0; y < height; y++) {
+            img(x, y, a1computeColor(x, y, width, height));
+        }
+    }
 }
 }
 
@@ -32,8 +38,18 @@ rt::RGBColor a2computeColor(const rt::Ray& r);
 namespace rt {
 
 void Renderer::test_render2(Image& img) {
-    CG_UNUSED(img);
-    /* TODO */ NOT_IMPLEMENTED;
+    const auto width = img.width();
+    const auto height = img.height();
+    float ndcx, ndcy, sscx, sscy;
+    for (rt::uint x = 0; x < width; x++) {
+        for (rt::uint y = 0; y < height; y++) {
+            ndcx = (x + 0.5f) / width;
+            ndcy = (y + 0.5f) / height;
+            sscx = (ndcx * 2) - 1;
+            sscy = (ndcy * 2) - 1;
+            img(x, height - y - 1, a2computeColor(cam->getPrimaryRay(sscx, sscy)));
+        }
+    }
 }
 
 }
