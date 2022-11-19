@@ -29,6 +29,18 @@ bool Point::operator != (const Point& b) const {
     return !(*this == b);
 }
 
+float Point::distance() const {
+    return std::sqrt(distanceSqr());
+}
+
+float Point::distanceSqr() const {
+    return x*x + y*y + z*z;
+}
+
+Point::operator Vector() const {
+    return Vector(this->x, this->y, this->z);
+}
+
 Point operator * (float scalar, const Point& b) {
     return Point(scalar * b.x, scalar * b.y, scalar * b.z);
 }

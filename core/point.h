@@ -23,6 +23,10 @@ public:
 
     bool operator==(const Point& b) const;
     bool operator!=(const Point& b) const;
+
+    explicit operator Vector() const;
+    float distance() const;
+    float distanceSqr() const;
     friend std::ostream& operator<<(std::ostream& os, const Point& p);
 
 };

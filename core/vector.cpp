@@ -51,6 +51,11 @@ Vector operator / (const Vector& a, float scalar) {
     return vec;
 }
 
+Vector operator / (float scalar, const Vector& a) {
+    Vector vec(scalar / a.x, scalar / a.y, scalar / a.z);
+    return vec;
+}
+
 Vector cross(const Vector& a, const Vector& b) {
     Vector vec((a.y * b.z)-(a.z * b.y), (a.z * b.x)-(a.x * b.z), (a.x * b.y)-(a.y * b.x));
     return vec;
@@ -79,6 +84,10 @@ bool Vector::operator == (const Vector& b) const {
 
 bool Vector::operator != (const Vector& b) const {
     return !(*this == b);
+}
+
+Vector::operator Point() const {
+    return Point(this->x, this->y, this->z);
 }
 
 Vector min(const Vector& a, const Vector& b) {
@@ -111,5 +120,7 @@ Point operator * (const HomogeneousCoord& scale, const Point& p) {
     // return pt;
     /* TODO */ NOT_IMPLEMENTED;
 }
+
+
 
 }
