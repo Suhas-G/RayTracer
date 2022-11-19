@@ -4,7 +4,7 @@
 namespace rt {
 
 Sphere::Sphere(const Point& center, float radius, CoordMapper* texMapper, Material* material)
-: center(center), radius(radius), radiusSqr(radius * radius), Solid(texMapper, material)
+: Solid(texMapper, material), center(center), radius(radius), radiusSqr(radius * radius)
 {
     area = 4 * pi * radiusSqr;
 }

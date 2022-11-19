@@ -3,7 +3,7 @@
 namespace rt {
 
 Intersection::Intersection(float distance, const Ray& ray, const Solid* solid, const Vector& normal, const Point& local)
-: distance(distance), ray(ray), solid(solid), _normal(normal), _local(local){
+: ray(ray), distance(distance), solid(solid), _normal(normal), _local(local){
     /* TODO */
 }
 

@@ -3,7 +3,7 @@
 namespace rt {
 
 Triangle::Triangle(Point vertices[3], CoordMapper* texMapper, Material* material)
-: vertices(vertices), Solid(texMapper, material)
+: Solid(texMapper, material), vertices(vertices)
 {
     edge1 = vertices[1] - vertices[0];
     edge2 = vertices[2] - vertices[1];

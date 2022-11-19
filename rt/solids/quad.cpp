@@ -4,7 +4,7 @@
 namespace rt {
 
 Quad::Quad(const Point& origin, const Vector& span1, const Vector& span2, CoordMapper* texMapper, Material* material)
-: origin(origin), span1(span1), span2(span2), Solid(texMapper, material) {
+: Solid(texMapper, material), origin(origin), span1(span1), span2(span2) {
     normal = rt::cross(span1, span2);
     area = normal.length();
     normal = normal.normalize();

@@ -4,7 +4,7 @@
 namespace rt {
 
 Disc::Disc(const Point& center, const Vector& normal, float radius, CoordMapper* texMapper, Material* material)
-: center(center), normal(normal.normalize()), radius(radius), Solid(texMapper, material) {
+: Solid(texMapper, material), center(center), radius(radius), normal(normal.normalize()) {
     radiusSqr = radius * radius;
 }
 

@@ -3,7 +3,7 @@
 namespace rt {
 
 InfinitePlane::InfinitePlane(const Point& origin, const Vector& normal, CoordMapper* texMapper, Material* material)
-: origin(origin), normal(normal.normalize()), Solid(texMapper, material) {
+: Solid(texMapper, material), origin(origin), normal(normal.normalize()) {
     
 }
 
