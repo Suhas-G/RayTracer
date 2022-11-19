@@ -3,28 +3,32 @@
 namespace rt {
 
 Intersection::Intersection(float distance, const Ray& ray, const Solid* solid, const Vector& normal, const Point& local)
-{
+: distance(distance), ray(ray), solid(solid), _normal(normal), _local(local){
     /* TODO */
 }
 
 Intersection::operator bool() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return !(std::isinf(distance));
 }
 
 Intersection Intersection::failure() {
-    /* TODO */ NOT_IMPLEMENTED;
+    return Intersection(std::numeric_limits<float>::infinity());
 }
 
 Point Intersection::hitPoint() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return ray.getPoint(distance);
 }
 
 Vector Intersection::normal() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return _normal;
 }
 
 Point Intersection::local() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return _local;
+}
+
+void Intersection::setLocal(Point uv) {
+    this->_local = uv;
 }
 
 }

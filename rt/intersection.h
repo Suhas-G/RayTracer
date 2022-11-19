@@ -16,6 +16,7 @@ public:
     float distance;
 
     Intersection() {}
+    Intersection(float distance): distance(distance) {}
     static Intersection failure();
     Intersection(float distance, const Ray& ray, const Solid* solid, const Vector& normal, const Point& uv);
 
@@ -23,7 +24,14 @@ public:
     Vector normal() const;
     Point local() const;
 
+    void setLocal(Point uv);
+
     operator bool() const; //this allows intersection object to be put directly in conditional statements. Becomes true if there is an intersection
+
+private:
+    Vector _normal;
+    Point _local;
+
 };
 
 }

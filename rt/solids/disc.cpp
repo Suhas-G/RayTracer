@@ -1,10 +1,11 @@
 #include <rt/solids/disc.h>
+#include <rt/solids/infiniteplane.h>
 
 namespace rt {
 
 Disc::Disc(const Point& center, const Vector& normal, float radius, CoordMapper* texMapper, Material* material)
-{
-    /* TODO */
+: center(center), normal(normal.normalize()), radius(radius), Solid(texMapper, material) {
+    radiusSqr = radius * radius;
 }
 
 BBox Disc::getBounds() const {
@@ -12,7 +13,11 @@ BBox Disc::getBounds() const {
 }
 
 Intersection Disc::intersect(const Ray& ray, float tmin, float tmax) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    const Intersection intersection = InfinitePlane::intersectWithPlane(ray, center, normal, this, tmin, tmax);
+    if (intersection && intersection.local().distanceSqr() <= radiusSqr ) {
+        return intersection;
+    }
+    return Intersection::failure();
 }
 
 Solid::Sample Disc::sample() const {
@@ -20,7 +25,7 @@ Solid::Sample Disc::sample() const {
 }
 
 float Disc::getArea() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return rt::pi * radiusSqr;
 }
 
 }

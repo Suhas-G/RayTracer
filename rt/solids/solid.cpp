@@ -8,6 +8,8 @@ Solid::Solid(CoordMapper* texMapper, Material* material)
     CG_UNUSED(material);
 
     /* TODO */
+    this->texMapper = texMapper;
+    this->material = material;
 }
 
 }

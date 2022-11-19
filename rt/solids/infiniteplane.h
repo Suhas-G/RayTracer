@@ -14,6 +14,11 @@ public:
     virtual Intersection intersect(const Ray& ray, float tmin = 0, float tmax = FLT_MAX) const;
     virtual Sample sample() const;
     virtual float getArea() const;
+
+    static Intersection intersectWithPlane(const Ray& ray, const Point& origin, const Vector& normal, const Solid*, float tmin = 0, float tmax = FLT_MAX);
+private:
+    Point origin;
+    Vector normal;
 };
 
 }
