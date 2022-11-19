@@ -3,6 +3,7 @@
 #include <rt/renderer.h>
 #include <rt/ray.h>
 #include <rt/cameras/camera.h>
+#include <rt/integrators/integrator.h>
 #include <iostream>
 
 namespace rt {
@@ -13,7 +14,20 @@ Renderer::Renderer(Camera* cam, Integrator* integrator)
 
 void Renderer::render(Image& img) {
     CG_UNUSED(img);
-    /* TODO */ NOT_IMPLEMENTED;
+    /* TODO */ 
+    const auto width = img.width();
+    const auto height = img.height();
+    float ndcx, ndcy, sscx, sscy;
+    for (rt::uint x = 0; x < width; x++) {
+        for (rt::uint y = 0; y < height; y++) {
+            ndcx = (x + 0.5f) / width;
+            ndcy = (y + 0.5f) / height;
+            sscx = (ndcx * 2) - 1;
+            sscy = (ndcy * 2) - 1;
+            Ray ray = cam->getPrimaryRay(sscx, sscy);
+            img(x, height - y - 1, integrator->getRadiance(ray));
+        }
+    }
 }
 
 }
