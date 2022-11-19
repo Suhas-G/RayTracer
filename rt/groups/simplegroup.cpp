@@ -7,7 +7,18 @@ BBox SimpleGroup::getBounds() const {
 }
 
 Intersection SimpleGroup::intersect(const Ray& ray, float tmin, float tmax) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    Intersection groupIntersection = Intersection::failure();
+    Intersection temp;
+
+    for (auto p: primitives) {
+        temp = p->intersect(ray, tmin, tmax);
+        if (temp) {
+            rt_assert(temp.distance < tmax);
+            tmax = temp.distance;
+            groupIntersection = temp;
+        }
+    }
+    return groupIntersection;
 }
 
 void SimpleGroup::rebuildIndex() {
@@ -15,15 +26,19 @@ void SimpleGroup::rebuildIndex() {
 }
 
 void SimpleGroup::add(Primitive* p) {
-    /* TODO */ NOT_IMPLEMENTED;
+    primitives.push_back(p);
 }
 
 void SimpleGroup::setMaterial(Material* m) {
-    /* TODO */ NOT_IMPLEMENTED;
+    for (auto p: primitives) {
+        p->setMaterial(m);
+    }
 }
 
 void SimpleGroup::setCoordMapper(CoordMapper* cm) {
-    /* TODO */ NOT_IMPLEMENTED;
+    for (auto p: primitives) {
+        p->setCoordMapper(cm);
+    }
 }
 
 }
