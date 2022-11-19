@@ -23,8 +23,8 @@ private:
     Vector forward;
     Vector up;
     Vector left;
-    float tangentVerticalOpeningAngle;
-    float tangentHorizontalOpeningAngle;
+    float aspectRatio;
+    float focalLength;
 };
 
 }

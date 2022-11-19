@@ -8,15 +8,14 @@ PerspectiveCamera::PerspectiveCamera(const Point& center, const Vector& forward,
 {
     this->left = rt::cross(up, forward).normalize();
     this->up = rt::cross(forward, this->left);
-    this->tangentHorizontalOpeningAngle = std::tan(horizontalOpeningAngle / 2);
-    this->tangentVerticalOpeningAngle = std::tan(verticalOpeningAngle / 2);
-    rt_assert(verticalOpeningAngle == horizontalOpeningAngle);
-
+    float tangentHorizontalOpeningAngle = std::tan(horizontalOpeningAngle / 2);
+    float tangentVerticalOpeningAngle = std::tan(verticalOpeningAngle / 2);
+    this->focalLength = (1/tangentVerticalOpeningAngle);
+    this->aspectRatio = tangentHorizontalOpeningAngle * this->focalLength;
 }
 
 Ray PerspectiveCamera::getPrimaryRay(float x, float y) const {
-    float f = (1/tangentHorizontalOpeningAngle);
-    Vector direction(((forward * f) + (-x * left) + (y * up)));
+    Vector direction(((forward * focalLength) + ((-x * aspectRatio) * left) + (y * up)));
     return Ray(center, direction.normalize());
 }
 
