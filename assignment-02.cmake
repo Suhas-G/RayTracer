@@ -14,6 +14,8 @@ set(MY_ADDITIONAL_SOURCES
     rt/solids/triangle.cpp
     rt/intersection.cpp
     rt/bbox.cpp
+    core/miscellaneous.h
+    core/miscellaneous.cpp
 )
 
 set(ASSIGNMENT_SOURCES
