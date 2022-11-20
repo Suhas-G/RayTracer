@@ -30,11 +30,14 @@ public:
 
     bool operator == (const Vector& b) const;
     bool operator != (const Vector& b) const;
+
+    explicit operator Point() const;
 };
 
 Vector operator * (float scalar, const Vector& b);
 Vector operator * (const Vector& a, float scalar);
 Vector operator / (const Vector& a, float scalar);
+Vector operator / (float scalar, const Vector& a);
 Vector cross(const Vector& a, const Vector& b);
 float dot(const Vector& a, const Vector& b);
 

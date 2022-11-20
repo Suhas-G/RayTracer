@@ -28,6 +28,8 @@ public:
     RGBColor clamp() const;
     RGBColor gamma(float gam) const;
     float luminance() const;
+
+    static RGBColor lerp(const RGBColor& c1, const RGBColor& c2, float alpha);
 };
 
 RGBColor operator * (float scalar, const RGBColor& b);

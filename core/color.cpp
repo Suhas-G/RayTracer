@@ -45,6 +45,10 @@ float RGBColor::luminance() const {
     /* TODO */ NOT_IMPLEMENTED;
 }
 
+RGBColor RGBColor::lerp(const RGBColor& c1, const RGBColor& c2, float alpha) {
+    return ((1 - alpha) * c1) + (alpha * c2);
+}
+
 RGBColor operator * (float scalar, const RGBColor& c) {
     return RGBColor(scalar * c.r, scalar * c.g, scalar * c.b);
 }
