@@ -31,7 +31,7 @@ Intersection InfinitePlane::intersectWithPlane(const Ray& ray, const Point& orig
     } 
 
     float t = rt::dot(origin - ray.o, normal) / denom;
-    if (t >= tmin && t <= tmax) {
+    if (t >= tmin && t < tmax) {
         const Point hitpoint = ray.getPoint(t);
         // W.r.t plane, local coordinate of hitpoint is hitpoint - origin
         // Assumed that ray.d is unit vector, otherwise t cannot be the distance
