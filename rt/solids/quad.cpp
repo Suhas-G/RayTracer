@@ -20,11 +20,11 @@ Intersection Quad::intersect(const Ray& ray, float tmin, float tmax) const {
     Intersection intersection = InfinitePlane::intersectWithPlane(ray, origin, normal, this, tmin, tmax);
     if (intersection) {
         Vector p = static_cast<Vector>(intersection.local());
-        float alpha = rt::dot(span1, p);
-        float beta = rt::dot(span2, p);
+        float alpha = rt::dot(span1, p) * invSpan1LengthSqr;
+        float beta = rt::dot(span2, p) * invSpan2LengthSqr;
 
-        if (alpha >= -rt::epsilon && alpha <= span1.lensqr() && beta >= -rt::epsilon && beta <= span2.lensqr()) {
-            intersection.setLocal(Point(alpha * invSpan1LengthSqr, beta * invSpan2LengthSqr, 1.0f));
+        if (alpha >= 0.0f && alpha <= 1.0f && beta >= 0.0f && beta <= 1.0f) {
+            intersection.setLocal(Point(alpha, beta, 1.0f));
             return intersection;
         }
     }
