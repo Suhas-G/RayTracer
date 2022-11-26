@@ -11,6 +11,8 @@ Triangle::Triangle(Point vertices[3], CoordMapper* texMapper, Material* material
     normal = rt::cross(edge1, -edge3);
     area = normal.length() / 2.0f;
     normal = normal.normalize();
+
+    bounds = BBox(rt::min(vertices[0], vertices[1], vertices[2]), rt::max(vertices[0], vertices[1], vertices[2]));
 }
 
 Triangle::Triangle(const Point& v1, const Point& v2, const Point& v3, CoordMapper* texMapper, Material* material)
@@ -25,10 +27,13 @@ Triangle::Triangle(const Point& v1, const Point& v2, const Point& v3, CoordMappe
     area = normal.length() / 2.0f;
     normal = normal.normalize();
 
+    bounds = BBox(rt::min(vertices[0], vertices[1], vertices[2]), rt::max(vertices[0], vertices[1], vertices[2]));
+
 }
 
 BBox Triangle::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    /* TODO */
+    return bounds;
 }
 
 Intersection Triangle::intersect(const Ray& ray, float tmin, float tmax) const {

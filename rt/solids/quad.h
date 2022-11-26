@@ -22,6 +22,7 @@ private:
     float area;
     float invSpan1LengthSqr;
     float invSpan2LengthSqr;
+    BBox bounds;
 };
 
 }

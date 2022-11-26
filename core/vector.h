@@ -30,6 +30,7 @@ public:
 
     bool operator == (const Vector& b) const;
     bool operator != (const Vector& b) const;
+    float& Vector::operator[](int index);
 
     explicit operator Point() const;
 };

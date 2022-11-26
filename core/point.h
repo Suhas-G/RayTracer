@@ -23,6 +23,8 @@ public:
 
     bool operator==(const Point& b) const;
     bool operator!=(const Point& b) const;
+    float operator[](const int index) const;
+    float& operator[](int index);
 
     explicit operator Vector() const;
     float distance() const;
@@ -34,8 +36,19 @@ public:
 Point operator*(float scalar, const Point& b);
 Point operator*(const Point& a, float scalar);
 
+Point operator+(float scalar, const Point& b);
+Point operator+(const Point& a, float scalar);
+
+Point operator+(const Point& a, const Point& b);
+
+Point operator-(float scalar, const Point& b);
+Point operator-(const Point& a, float scalar);
+
 Point min(const Point& a, const Point& b);
 Point max(const Point& a, const Point& b);
+
+Point min(const Point& a, const Point& b, const Point& c);
+Point max(const Point& a, const Point& b, const Point& c);
 
 }
 

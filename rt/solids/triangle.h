@@ -22,6 +22,7 @@ private:
     Vector edge1;
     Vector edge2;
     Vector edge3;
+    BBox bounds;
 };
 
 }

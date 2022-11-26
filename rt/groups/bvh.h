@@ -6,6 +6,40 @@
 
 namespace rt {
 
+enum class SplitMethod {
+    Middle, SAH
+};
+
+ALIGN(32)
+struct LinearBVHNode {
+    BBox bounds; //24 bytes
+    union {
+        int primitiveOffset; // 4 bytes
+        int secondChildOffset;
+    };
+    uint16_t nPrimitives; // 2 bytes
+    uint8_t axis; // 1 byte
+    uint8_t pad[1]; // 1 byte
+};
+
+struct BVHPrimitiveInfo {
+    BBox box;
+    int primitiveIndex;
+    Point center;
+};
+
+struct BVHBuildNode {
+    BBox box = BBox::empty();
+    BVHBuildNode *children[2];
+    rt::Axis splitAxis;
+    int firstPrimOffset = -1;
+    int nPrimitives;
+
+    void initLeafNode(int firstPrimOffset, int nPrimitives);
+    void initInteriorNode(BVHBuildNode* leftChild, BVHBuildNode* rightChild);
+    
+};
+
 class BVH : public Group {
 public:
     BVH();
@@ -47,6 +81,17 @@ public:
         virtual const SerializedNode& readNode(size_t nodeId) = 0;
     };
     void deserialize(Input& input);
+    ~BVH();
+private:
+    SplitMethod splitMethod;
+    std::vector<BVHPrimitiveInfo> primitiveInfo;
+    Primitives orderedPrimitives;
+    LinearBVHNode* bvhTree;
+
+    BVHBuildNode* recursiveBuild(int start, int end, int& totalNodes);
+    BVHBuildNode* createLeafNode(int start, int end, int& totalNodes);
+    BVHBuildNode* createInteriorNode(int start, int end, int& totalNodes);
+    int flattenBHVTree(BVHBuildNode* root, int& offset);
 };
 
 }

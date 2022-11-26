@@ -7,7 +7,7 @@ PerspectiveCamera::PerspectiveCamera(const Point& center, const Vector& forward,
     center(center), forward(forward.normalize()), up(up.normalize())
 {
     this->left = rt::cross(up, forward).normalize();
-    this->up = rt::cross(forward, this->left);
+    this->up = rt::cross(forward, this->left).normalize();
     float tangentHorizontalOpeningAngle = std::tan(horizontalOpeningAngle / 2);
     float tangentVerticalOpeningAngle = std::tan(verticalOpeningAngle / 2);
     this->focalLength = (1/tangentVerticalOpeningAngle);

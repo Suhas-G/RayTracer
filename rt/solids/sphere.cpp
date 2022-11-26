@@ -7,10 +7,11 @@ Sphere::Sphere(const Point& center, float radius, CoordMapper* texMapper, Materi
 : Solid(texMapper, material), center(center), radius(radius), radiusSqr(radius * radius)
 {
     area = 4 * pi * radiusSqr;
+    bounds = BBox(center - radius, center + radius);
 }
 
 BBox Sphere::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return bounds;
 }
 
 Intersection Sphere::intersect(const Ray& ray, float tmin, float tmax) const {
