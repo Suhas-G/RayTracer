@@ -22,7 +22,10 @@ namespace rt {
     void BBox::extend(const Point& point) {
         // No need to extend if its full
         // cant extend empty by a point
-        if (!isFull() && !isEmpty()) {
+        if (isEmpty()) {
+            this->min = point;
+            this->max = point;
+        } else if (!isFull()) {
             this->min = rt::min(this->min, point);
             this->max = rt::max(this->max, point);
         }
@@ -102,7 +105,8 @@ namespace rt {
     }
 
     bool BBox::isEmpty() const {
-        return std::abs((max.x - min.x) * (max.y - min.y) * (max.z - min.z)) < rt::epsilon;
+        return (std::abs(max.x) < rt::epsilon && std::abs(max.y) < rt::epsilon && std::abs(max.z) < rt::epsilon &&
+                std::abs(min.x) < rt::epsilon && std::abs(min.y) < rt::epsilon && std::abs(min.z) < rt::epsilon);
     }
 
     bool BBox::isFull() const {
