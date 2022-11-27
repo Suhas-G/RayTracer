@@ -4,7 +4,7 @@
 
 namespace rt {
 
-Ray::Ray(const Point& o, const Vector& d): o(o), d(d.normalize())
+Ray::Ray(const Point& o, const Vector& d): o(o), d(d)
 {
     rt_assert(d != Vector::rep(0.0f));
 
