@@ -18,7 +18,7 @@ namespace rt {
         }
 
         primitiveInfo = std::vector<BVHPrimitiveInfo>(primitives.size());
-        for (int i = 0; i < primitives.size(); i++) {
+        for (size_t i = 0; i < primitives.size(); i++) {
             primitiveInfo[i].box = primitives[i]->getBounds();
             primitiveInfo[i].primitiveIndex = i;
             // TODO: How to do unbounded boxes?

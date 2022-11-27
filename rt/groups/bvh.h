@@ -10,7 +10,6 @@ enum class SplitMethod {
     Middle, SAH
 };
 
-ALIGN(32)
 struct LinearBVHNode {
     BBox bounds; //24 bytes
     union {
