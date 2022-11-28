@@ -22,7 +22,7 @@ void a_indexing() {
     scene->add(new Sphere(Point(2.5f,  -1.f,  -1), 0.5, nullptr, nullptr));
     scene->add(new Sphere(Point(4.5f,  .5f,  -1), 0.5 , nullptr, nullptr));
 
-    loadOBJ(scene, "D:\\Study\\Winter_Semester_2022\\Computer Graphics\\Assignments\\Assignment\\bidoof\\models\\", "cow.obj");
+    loadOBJ(scene, "models/", "cow.obj");
   
 	scene->rebuildIndex();
     World world;

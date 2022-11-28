@@ -2,13 +2,14 @@
 #include <core/point.h>
 #include <stack>
 #include <tuple>
+#include <cmath>
 
 namespace rt {
 
     BVH::BVH()
     {
         /* TODO */
-        this->splitMethod = SplitMethod::Middle;
+        this->splitMethod = SplitMethod::SAH;
     }
 
     void BVH::rebuildIndex() {
@@ -33,8 +34,7 @@ namespace rt {
         primitives.swap(orderedPrimitives);
 
         orderedPrimitives.clear();
-        std::cout << "Primitive count: " << primitives.size() << std::endl;
-        std::cout << "Total Node count" << totalNodes << " " << static_cast<int>(root->splitAxis) << std::endl;
+
         // Create linear nodes
         bvhTree = new LinearBVHNode[totalNodes];
         int offset = 0;
@@ -47,8 +47,12 @@ namespace rt {
         int nPrimitives = end - start;
         if (nPrimitives < 3) {
             return createLeafNode(start, end, totalNodes);
-        } else {
+        } else if (this->splitMethod == SplitMethod::Middle){
             return createInteriorNode(start, end, totalNodes);
+        } else if (this->splitMethod == SplitMethod::SAH) {
+            return createSAHInteriorNode(start, end, totalNodes);
+        } else {
+            rt_assert(false);
         }
     }
 
@@ -85,6 +89,95 @@ namespace rt {
         }
         node->initInteriorNode(recursiveBuild(start, mid, totalNodes), recursiveBuild(mid, end, totalNodes));
         return node;
+    }
+
+    BVHBuildNode* BVH::createSAHInteriorNode(int start, int end, int& totalNodes) {
+        totalNodes++;
+        BVHBuildNode* node = new BVHBuildNode();
+
+
+        for (int i = start; i < end; i++) {
+            node->box.extend(primitiveInfo[i].box);
+        }
+        node->splitAxis = node->box.biggestDimensionAxis();
+        int splitAxis = static_cast<int>(node->splitAxis);
+
+        // Split the axis dimension into buckets
+        // PBRT uses 12 buckets
+        const int NO_OF_BUCKETS = 6;
+        SAHBucketInfo buckets[NO_OF_BUCKETS];
+
+        for (int i = start; i < end; i++) {
+            float offset = (primitiveInfo[i].center[splitAxis] - node->box.min[splitAxis]) / (node->box.max[splitAxis] - node->box.min[splitAxis]);
+            // bool check = (!std::isinf(offset) && !std::isnan(offset) && offset >= 0.0f && offset <= 1.0f);
+            // rt_assert(check);
+            int bucketNo = NO_OF_BUCKETS * (offset);
+            if (bucketNo >= NO_OF_BUCKETS) bucketNo = NO_OF_BUCKETS - 1;
+            buckets[bucketNo].primitiveCount++;
+            buckets->bounds.extend(primitiveInfo[i].box);
+        }
+
+        BBox left = BBox::empty();
+        BBox right = BBox::empty();
+        // Integer size for no of primitives. Should be ok
+        int leftPrimitiveCount = 0, rightPrimitiveCount = 0;
+        float cost = -1000.123f;
+        float minimumCost = -1000.123f;
+        int bucketSplitIndex = 0;
+        for (int i = 0; i < NO_OF_BUCKETS - 1; i++) {
+            left  = BBox::empty();
+            right = BBox::empty();
+            leftPrimitiveCount = 0;
+            rightPrimitiveCount = 0;
+            for (int j = 0; j <= i; j++) {
+                left.extend(buckets[j].bounds);
+                leftPrimitiveCount += buckets[j].primitiveCount;
+            }
+            for (int k = i + 1; k < NO_OF_BUCKETS; k++) {
+                right.extend(buckets[k].bounds);
+                rightPrimitiveCount += buckets[k].primitiveCount;
+            }
+
+            cost = 1 + (leftPrimitiveCount * left.area() + rightPrimitiveCount * right.area()) / node->box.area();
+            if (i == 0 || cost < minimumCost) {
+                minimumCost = cost;
+                bucketSplitIndex = i;
+            }
+
+        }
+
+        rt_assert(minimumCost != -1000.123f); // Well it could happen, but just a simple check to make sure it has changed;
+
+        float leafCost = (end - start);
+        if (minimumCost < leafCost) {
+            BVHPrimitiveInfo* midPrimitiveInfo = std::partition(&primitiveInfo[start], &primitiveInfo[end - 1] + 1,
+                [splitAxis, bucketSplitIndex, &node](const BVHPrimitiveInfo& pInfo) {
+                    float offset = (pInfo.center[splitAxis] - node->box.min[splitAxis]) / (node->box.max[splitAxis] - node->box.min[splitAxis]);
+                    int bucketNo = NO_OF_BUCKETS * (offset);
+                    if (bucketNo >= NO_OF_BUCKETS) bucketNo = NO_OF_BUCKETS - 1;
+                    return (bucketNo <= bucketSplitIndex);
+            });
+
+            // Integer size is enough for all primitives?
+            int mid = static_cast<int>(midPrimitiveInfo - &primitiveInfo[0]);
+            // If this happens, ideally I should try next axis?
+            // TODO
+            if (mid == start || mid == end) {
+                // std::cout << "Unable to split" << std::endl;
+                mid = (start + end) / 2;
+                std::nth_element(&primitiveInfo[start], &primitiveInfo[mid],
+                    &primitiveInfo[end - 1] + 1,
+                    [splitAxis](const BVHPrimitiveInfo& a,
+                        const BVHPrimitiveInfo& b) {
+                            return a.center[splitAxis] < b.center[splitAxis];
+                    });
+            }
+            node->initInteriorNode(recursiveBuild(start, mid, totalNodes), recursiveBuild(mid, end, totalNodes));
+            return node;
+        } else {
+            return createLeafNode(start, end, totalNodes);
+        }
+
     }
 
     BVHBuildNode* BVH::createLeafNode(int start, int end, int& totalNodes) {

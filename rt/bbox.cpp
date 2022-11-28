@@ -56,10 +56,10 @@ namespace rt {
         float tymin = ((*bounds)[ray.dirIsNeg[1]].y - ray.o.y) * ray.invD.y;
         float tymax = ((*bounds)[1 - ray.dirIsNeg[1]].y - ray.o.y) * ray.invD.y;
         // // Do not intersect
-        // if ((tmin > tymax) || (tymin > tmax)) {
-        //     // Maybe has to be changed to actual t values
-        //     return std::make_pair(tmin, tmax);
-        // }
+        if ((tmin > tymax) || (tymin > tmax)) {
+            // Maybe has to be changed to actual t values
+            return std::make_pair(1.0f, -1.0f);
+        }
 
         if (tymin > tmin) tmin = tymin;
         if (tymax < tmax) tmax = tymax;
@@ -67,10 +67,10 @@ namespace rt {
         float tzmin = ((*bounds)[ray.dirIsNeg[2]].z - ray.o.z) * ray.invD.z;
         float tzmax = ((*bounds)[1 - ray.dirIsNeg[2]].z - ray.o.z) * ray.invD.z;
 
-        // if ((tmin > tzmax) || (tzmin > tmax)) {
-        //     // Maybe has to be changed to actual t values
-        //     return std::make_pair(3.0f, -3.0f);
-        // }
+        if ((tmin > tzmax) || (tzmin > tmax)) {
+            // Maybe has to be changed to actual t values
+            return std::make_pair(1.0f, -1.0f);
+        }
 
         if (tzmin > tmin) tmin = tzmin;
         if (tzmax < tmax) tmax = tzmax;

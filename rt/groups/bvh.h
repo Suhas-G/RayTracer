@@ -10,6 +10,11 @@ enum class SplitMethod {
     Middle, SAH
 };
 
+struct SAHBucketInfo {
+    int primitiveCount = 0;
+    BBox bounds = BBox::empty();
+};
+
 struct LinearBVHNode {
     BBox bounds; //24 bytes
     union {
@@ -90,6 +95,7 @@ private:
     BVHBuildNode* recursiveBuild(int start, int end, int& totalNodes);
     BVHBuildNode* createLeafNode(int start, int end, int& totalNodes);
     BVHBuildNode* createInteriorNode(int start, int end, int& totalNodes);
+    BVHBuildNode* createSAHInteriorNode(int start, int end, int& totalNodes);
     int flattenBHVTree(BVHBuildNode* root, int& offset);
 };
 
