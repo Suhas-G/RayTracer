@@ -8,7 +8,22 @@ InfinitePlane::InfinitePlane(const Point& origin, const Vector& normal, CoordMap
 }
 
 BBox InfinitePlane::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    /* TODO */
+    Point p1 = Point(-std::numeric_limits<float>::infinity(), -std::numeric_limits<float>::infinity(), -std::numeric_limits<float>::infinity());
+    Point p2 = Point(std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity());
+
+    if (std::abs(normal.x) < rt::epsilon && std::abs(normal.y) < rt::epsilon) {
+        p1.z = origin.z - (normal.z * rt::OFFSET_MULTIPLIER * rt::epsilon);
+        p2.z = origin.z + (normal.z * rt::OFFSET_MULTIPLIER * rt::epsilon);
+    } else if (std::abs(normal.y) < rt::epsilon && std::abs(normal.z) < rt::epsilon) {
+        p1.x = origin.x - (normal.x * rt::OFFSET_MULTIPLIER * rt::epsilon);
+        p2.x = origin.x + (normal.x * rt::OFFSET_MULTIPLIER * rt::epsilon);
+    } else if (std::abs(normal.x) < rt::epsilon && std::abs(normal.z) < rt::epsilon) {
+        p1.y = origin.y - (normal.y * rt::OFFSET_MULTIPLIER * rt::epsilon);
+        p2.y = origin.y + (normal.y * rt::OFFSET_MULTIPLIER * rt::epsilon);
+    }
+
+    return BBox(p1, p2);
 }
 
 Intersection InfinitePlane::intersect(const Ray& ray, float tmin, float tmax) const {

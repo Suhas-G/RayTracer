@@ -10,10 +10,16 @@ Quad::Quad(const Point& origin, const Vector& span1, const Vector& span2, CoordM
     normal = normal.normalize();
     invSpan1LengthSqr = 1.0f / span1.lensqr();
     invSpan2LengthSqr = 1.0f / span2.lensqr();
+    Point b, c, d;
+    b = origin + span1;
+    c = origin + span2;
+    d = origin + (span1 + span2);
+    bounds = BBox(rt::min(rt::min(origin, b), rt::min(c, d)), rt::max(rt::max(origin, b), rt::max(c, d)));
 }
 
 BBox Quad::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    /* TODO */
+    return bounds;
 }
 
 Intersection Quad::intersect(const Ray& ray, float tmin, float tmax) const {

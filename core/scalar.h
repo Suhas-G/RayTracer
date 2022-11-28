@@ -39,6 +39,8 @@ static const float epsilon = 0.000001f;
 // The mathematical pi constant
 static const float pi = 3.141592f;
 
+static const float OFFSET_MULTIPLIER = 100.0f;
+
 typedef unsigned int uint;
 
 float clamp01(const float &x);

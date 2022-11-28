@@ -10,6 +10,8 @@ class Ray {
 public:
     Point o;
     Vector d;
+    Vector invD;
+    int dirIsNeg[3];
 
     Ray() {}
     Ray(const Point& o, const Vector& d);

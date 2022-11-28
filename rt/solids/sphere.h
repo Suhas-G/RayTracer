@@ -19,6 +19,7 @@ private:
     const float radius;
     const float radiusSqr;
     float area = 0.0f;
+    BBox bounds;
 };
 
 }

@@ -90,6 +90,16 @@ Vector::operator Point() const {
     return Point(this->x, this->y, this->z);
 }
 
+float& Vector::operator[](int index) {
+    if (index == 0)
+        return this->x;
+    if (index == 1)
+        return this->y;
+    if (index == 2)
+        return this->z;
+    throw rt::Assert() << "Out of bounds for 3 value vector";
+}
+
 Vector min(const Vector& a, const Vector& b) {
     Vector vec(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z));
     return vec;
