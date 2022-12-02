@@ -131,6 +131,9 @@ Point operator * (const HomogeneousCoord& scale, const Point& p) {
     /* TODO */ NOT_IMPLEMENTED;
 }
 
+std::ostream &operator<<(std::ostream &os, Vector const &v) { 
+    return os << "Vector(x: " << v.x << " y: " << v.y << " z: " << v.z << ")";
+}
 
 
 }

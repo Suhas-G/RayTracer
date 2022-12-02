@@ -29,7 +29,10 @@ Intersection Quad::intersect(const Ray& ray, float tmin, float tmax) const {
         Vector p = static_cast<Vector>(intersection.local());
         float alpha = rt::dot(span1, p) * invSpan1LengthSqr;
         float beta = rt::dot(span2, p) * invSpan2LengthSqr;
-
+        std::cout << "Intersection point: " << p << std::endl;
+        std::cout << "Inv Span 1: " << invSpan1LengthSqr << std::endl;
+        std::cout << "Inv Span 2: " << invSpan2LengthSqr << std::endl;
+        std::cout << "Alpha: " << alpha << "Beta: " << beta << std::endl;
         if (alpha >= 0.0f && alpha <= 1.0f && beta >= 0.0f && beta <= 1.0f) {
             std::cout << "Inside alpha beta calculation" << std::endl;
             intersection.setLocal(Point(alpha, beta, 1.0f));
