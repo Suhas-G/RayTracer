@@ -25,11 +25,13 @@ BBox Quad::getBounds() const {
 Intersection Quad::intersect(const Ray& ray, float tmin, float tmax) const {
     Intersection intersection = InfinitePlane::intersectWithPlane(ray, origin, normal, this, tmin, tmax);
     if (intersection) {
+        std::cout << "Intersection with plane succeeded" << std::endl;
         Vector p = static_cast<Vector>(intersection.local());
         float alpha = rt::dot(span1, p) * invSpan1LengthSqr;
         float beta = rt::dot(span2, p) * invSpan2LengthSqr;
 
         if (alpha >= 0.0f && alpha <= 1.0f && beta >= 0.0f && beta <= 1.0f) {
+            std::cout << "Inside alpha beta calculation" << std::endl;
             intersection.setLocal(Point(alpha, beta, 1.0f));
             return intersection;
         }
