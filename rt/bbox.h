@@ -22,6 +22,7 @@ public:
     {
         this->min = rt::min(min, max);
         this->max = rt::max(min, max);
+        ensureThickness();
     }
 
     static BBox empty();
@@ -43,12 +44,13 @@ public:
 
     bool isUnbound() const;
     Axis biggestDimensionAxis() const;
+    bool isEmpty() const;
     friend std::ostream& operator<<(std::ostream& os, const BBox& box);
 private:
 //     bool isEmpty = false;
 //     bool isFull = false;
-    bool isEmpty() const;
     bool isFull() const;
+    void ensureThickness();
 };
 
 }

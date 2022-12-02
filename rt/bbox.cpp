@@ -7,7 +7,9 @@ namespace rt {
     BBox BBox::empty() {
         Point p1 = Point(0, 0, 0);
         Point p2 = Point(0, 0, 0);
-        BBox box(p1, p2);
+        BBox box;
+        box.min = p1;
+        box.max = p2;
         return box;
     }
 
@@ -28,6 +30,7 @@ namespace rt {
         } else if (!isFull()) {
             this->min = rt::min(this->min, point);
             this->max = rt::max(this->max, point);
+            ensureThickness();
         }
     }
 
@@ -38,6 +41,7 @@ namespace rt {
         } else if (!isFull()) {
             this->min = rt::min(this->min, bbox.min);
             this->max = rt::max(this->max, bbox.max);
+            ensureThickness();
         }
     }
 
@@ -112,6 +116,15 @@ namespace rt {
     bool BBox::isFull() const {
         return (std::isinf(min.x) && std::isinf(min.y) && std::isinf(min.z) &&
             std::isinf(max.x) && std::isinf(max.y) && std::isinf(max.z));
+    }
+
+    void BBox::ensureThickness() {
+        for (int i = 0; i < 3; i++) {
+            if (this->max[i] - this->min[i] < rt::epsilon) {
+                this->max[i] += (rt::epsilon);
+                this->min[i] -= (rt::epsilon);
+            }
+        }
     }
 
     std::ostream& operator<<(std::ostream& os, const BBox& box) {
