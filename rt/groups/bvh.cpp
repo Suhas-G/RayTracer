@@ -9,7 +9,7 @@ namespace rt {
     BVH::BVH()
     {
         /* TODO */
-        this->splitMethod = SplitMethod::SAH;
+        this->splitMethod = SplitMethod::Middle;
     }
 
     void BVH::rebuildIndex() {
@@ -52,7 +52,7 @@ namespace rt {
         } else if (this->splitMethod == SplitMethod::SAH) {
             return createSAHInteriorNode(start, end, totalNodes);
         } else {
-            rt_assert(false);
+            throw std::runtime_error("Impossible! Something went wrong");
         }
     }
 
@@ -114,7 +114,7 @@ namespace rt {
             int bucketNo = NO_OF_BUCKETS * (offset);
             if (bucketNo >= NO_OF_BUCKETS) bucketNo = NO_OF_BUCKETS - 1;
             buckets[bucketNo].primitiveCount++;
-            buckets->bounds.extend(primitiveInfo[i].box);
+            buckets[bucketNo].bounds.extend(primitiveInfo[i].box);
         }
 
         BBox left = BBox::empty();
@@ -145,8 +145,7 @@ namespace rt {
             }
 
         }
-
-        rt_assert(minimumCost != -1000.123f); // Well it could happen, but just a simple check to make sure it has changed;
+        // rt_assert(minimumCost != -1000.123f); // Well it could happen, but just a simple check to make sure it has changed;
 
         float leafCost = (end - start);
         if (minimumCost < leafCost) {
@@ -235,7 +234,7 @@ namespace rt {
             nodesToVisit.pop();
             const LinearBVHNode* node = &bvhTree[index];
             std::tie(boundTmin, boundTmax) = node->bounds.intersect(ray);
-            if (boundTmax >= boundTmin) {
+            if (boundTmax >= boundTmin && boundTmin <= tmax) {
                 // Have to check inside the node
                 if (node->nPrimitives > 0) {
                     // Leaf node
