@@ -127,6 +127,30 @@ namespace rt {
         }
     }
 
+    Point BBox::center() const {
+        Point c;
+        // TODO: If only one side is infinity, then how to take center?
+        if (std::isinf(min.x) || std::isinf(max.x)) {
+            c.x = 0;
+        } else {
+            c.x = 0.5f * (min.x + max.x);
+        }
+
+        if (std::isinf(min.y) || std::isinf(max.y)) {
+            c.y = 0;
+        } else {
+            c.y = 0.5f * (min.y + max.y);
+        }
+
+        if (std::isinf(min.z) || std::isinf(max.z)) {
+            c.z = 0;
+        } else {
+            c.z = 0.5f * (min.z + max.z);
+        }
+
+        return c;
+    }
+
     std::ostream& operator<<(std::ostream& os, const BBox& box) {
         return os << "BBox(min: " << box.min << ", max: " << box.max << ")";
     }

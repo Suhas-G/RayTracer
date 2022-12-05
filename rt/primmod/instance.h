@@ -2,6 +2,7 @@
 #define CG1RAYTRACER_PRIMMOD_INSTANCE_HEADER
 
 #include <core/vector.h>
+#include <core/matrix.h>
 #include <rt/primitive.h>
 
 namespace rt {
@@ -21,6 +22,11 @@ public:
     virtual Intersection intersect(const Ray& ray, float tmin = 0, float tmax = FLT_MAX) const;
     virtual void setMaterial(Material* m);
     virtual void setCoordMapper(CoordMapper* cm);
+private:
+    CoordMapper* cm;
+    Material* m;
+    Primitive* contentPrimitive;
+    Matrix transformation = Matrix::identity();
 };
 
 }

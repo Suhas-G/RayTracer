@@ -21,4 +21,14 @@ Point Ray::getPoint(float distance) const {
     return o + distance * d;
 }
 
+Ray Ray::transform(const Matrix& m) const {
+    Point origin = m * this->o;
+    Vector dir = (m * this->d).normalize();
+    return Ray(origin, dir);
+}
+
+float Ray::getDistance(const Point& p) const {
+    return (p - o).length() / d.length();
+}
+
 }

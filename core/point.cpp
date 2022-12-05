@@ -10,7 +10,11 @@ Point::Point(float x, float y, float z): x(x), y(y), z(z) {}
 
 Point::Point(const HomogeneousCoord& coord)
 {
-    /* TODO */ NOT_IMPLEMENTED;
+    float denom = (std::abs(coord[3]) < rt::epsilon) ? 1 : coord[3];
+    this->x = coord[0] / denom;
+    this->y = coord[1] / denom;
+    this->z = coord[2] / denom;
+
 }
 
 Vector Point::operator - (const Point& b) const {

@@ -23,8 +23,9 @@ namespace rt {
             primitiveInfo[i].box = primitives[i]->getBounds();
             primitiveInfo[i].primitiveIndex = i;
             // TODO: How to do unbounded boxes?
-            rt_assert(!primitiveInfo[i].box.isUnbound());
-            primitiveInfo[i].center = 0.5f * (primitiveInfo[i].box.min + primitiveInfo[i].box.max);
+            // rt_assert(!primitiveInfo[i].box.isUnbound());
+            // primitiveInfo[i].center = 0.5f * (primitiveInfo[i].box.min + primitiveInfo[i].box.max);
+            primitiveInfo[i].center = primitiveInfo[i].box.center();
         }
         int totalNodes = 0;
         BVHBuildNode* root = recursiveBuild(0, static_cast<int>(primitiveInfo.size()), totalNodes);
@@ -108,9 +109,14 @@ namespace rt {
         SAHBucketInfo buckets[NO_OF_BUCKETS];
 
         for (int i = start; i < end; i++) {
+            // FIXME: If primitive is unbound, how to do this?
             float offset = (primitiveInfo[i].center[splitAxis] - node->box.min[splitAxis]) / (node->box.max[splitAxis] - node->box.min[splitAxis]);
             // bool check = (!std::isinf(offset) && !std::isnan(offset) && offset >= 0.0f && offset <= 1.0f);
             // rt_assert(check);
+            if (std::isnan(offset)) {
+                // For unbounded primitives, like infinite plane, just add to first bucket
+                offset = 0.0f;
+            }
             int bucketNo = NO_OF_BUCKETS * (offset);
             if (bucketNo >= NO_OF_BUCKETS) bucketNo = NO_OF_BUCKETS - 1;
             buckets[bucketNo].primitiveCount++;

@@ -45,6 +45,7 @@ public:
     bool isUnbound() const;
     Axis biggestDimensionAxis() const;
     bool isEmpty() const;
+    Point center() const;
     friend std::ostream& operator<<(std::ostream& os, const BBox& box);
 private:
 //     bool isEmpty = false;

@@ -9,6 +9,9 @@ class Matrix {
 public:
     Matrix() {}
     Matrix(const HomogeneousCoord& r1, const HomogeneousCoord& r2, const HomogeneousCoord& r3, const HomogeneousCoord& r4);
+    static Matrix rep(const HomogeneousCoord& h) {
+        return Matrix(h, h, h, h);
+    }
 
     HomogeneousCoord& operator[](int idx);
     HomogeneousCoord operator[](int idx) const;
@@ -33,6 +36,8 @@ public:
     static Matrix identity();
 
     static Matrix system(const Vector& e1, const Vector& e2, const Vector& e3);
+private:
+    HomogeneousCoord rows[4];
 };
 
 Matrix product(const Matrix& a, const Matrix& b);
