@@ -13,7 +13,10 @@ Vector::Vector(float x, float y, float z): x(x), y(y), z(z) {}
 // Vector::Vector(const HomogeneousCoord& coord): x(coord[0] / coord[3]), y(coord[1] / coord[3]), z(coord[2] / coord[3]) {}
 
 Vector::Vector(const HomogeneousCoord& coord) {
-    /* TODO */ NOT_IMPLEMENTED;
+    rt_assert(coord[3] == 0);
+    this->x = coord[0];
+    this->y = coord[1];
+    this->z = coord[2];
 }
 
 Vector Vector::operator + (const Vector& b) const {
@@ -125,12 +128,14 @@ Point operator - (const Point& a, const Vector& b) {
 }
 
 Point operator * (const HomogeneousCoord& scale, const Point& p) {
-    // Point pt;
-    // pt = Point((scale[0] * p.x), scale[1] * p.y, scale[2] * p.z) * (1/scale[3]);
-    // return pt;
-    /* TODO */ NOT_IMPLEMENTED;
+    Point pt;
+    pt = Point((scale[0] * p.x), scale[1] * p.y, scale[2] * p.z) * (1/scale[3]);
+    return pt;
 }
 
+std::ostream &operator<<(std::ostream &os, Vector const &v) { 
+    return os << "Vector(x: " << v.x << " y: " << v.y << " z: " << v.z << ")";
+}
 
 
 }

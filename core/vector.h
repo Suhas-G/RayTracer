@@ -33,6 +33,7 @@ public:
     float& operator[](int index);
 
     explicit operator Point() const;
+    friend std::ostream& operator<<(std::ostream& os, const Vector& v);
 };
 
 Vector operator * (float scalar, const Vector& b);

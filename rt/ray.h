@@ -2,6 +2,7 @@
 #define CG1RAYTRACER_RAY_HEADER
 
 #include <core/vector.h>
+#include <core/matrix.h>
 #include <core/point.h>
 
 namespace rt {
@@ -16,6 +17,8 @@ public:
     Ray() {}
     Ray(const Point& o, const Vector& d);
     Point getPoint(float distance) const;
+    std::pair<Ray, float> transform(const Matrix& m) const;
+    float getDistance(const Point& p) const;
 };
 
 }

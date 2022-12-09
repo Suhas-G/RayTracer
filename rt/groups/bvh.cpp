@@ -9,7 +9,7 @@ namespace rt {
     BVH::BVH()
     {
         /* TODO */
-        this->splitMethod = SplitMethod::SAH;
+        this->splitMethod = SplitMethod::Middle;
     }
 
     void BVH::rebuildIndex() {
@@ -23,8 +23,9 @@ namespace rt {
             primitiveInfo[i].box = primitives[i]->getBounds();
             primitiveInfo[i].primitiveIndex = i;
             // TODO: How to do unbounded boxes?
-            rt_assert(!primitiveInfo[i].box.isUnbound());
-            primitiveInfo[i].center = 0.5f * (primitiveInfo[i].box.min + primitiveInfo[i].box.max);
+            // rt_assert(!primitiveInfo[i].box.isUnbound());
+            // primitiveInfo[i].center = 0.5f * (primitiveInfo[i].box.min + primitiveInfo[i].box.max);
+            primitiveInfo[i].center = primitiveInfo[i].box.center();
         }
         int totalNodes = 0;
         BVHBuildNode* root = recursiveBuild(0, static_cast<int>(primitiveInfo.size()), totalNodes);
@@ -52,7 +53,7 @@ namespace rt {
         } else if (this->splitMethod == SplitMethod::SAH) {
             return createSAHInteriorNode(start, end, totalNodes);
         } else {
-            rt_assert(false);
+            throw std::runtime_error("Impossible! Something went wrong");
         }
     }
 
@@ -108,13 +109,18 @@ namespace rt {
         SAHBucketInfo buckets[NO_OF_BUCKETS];
 
         for (int i = start; i < end; i++) {
+            // FIXME: If primitive is unbound, how to do this?
             float offset = (primitiveInfo[i].center[splitAxis] - node->box.min[splitAxis]) / (node->box.max[splitAxis] - node->box.min[splitAxis]);
             // bool check = (!std::isinf(offset) && !std::isnan(offset) && offset >= 0.0f && offset <= 1.0f);
             // rt_assert(check);
+            if (std::isnan(offset)) {
+                // For unbounded primitives, like infinite plane, just add to first bucket
+                offset = 0.0f;
+            }
             int bucketNo = NO_OF_BUCKETS * (offset);
             if (bucketNo >= NO_OF_BUCKETS) bucketNo = NO_OF_BUCKETS - 1;
             buckets[bucketNo].primitiveCount++;
-            buckets->bounds.extend(primitiveInfo[i].box);
+            buckets[bucketNo].bounds.extend(primitiveInfo[i].box);
         }
 
         BBox left = BBox::empty();
@@ -145,8 +151,7 @@ namespace rt {
             }
 
         }
-
-        rt_assert(minimumCost != -1000.123f); // Well it could happen, but just a simple check to make sure it has changed;
+        // rt_assert(minimumCost != -1000.123f); // Well it could happen, but just a simple check to make sure it has changed;
 
         float leafCost = (end - start);
         if (minimumCost < leafCost) {
@@ -235,7 +240,7 @@ namespace rt {
             nodesToVisit.pop();
             const LinearBVHNode* node = &bvhTree[index];
             std::tie(boundTmin, boundTmax) = node->bounds.intersect(ray);
-            if (boundTmax >= boundTmin) {
+            if (boundTmax >= boundTmin && boundTmin <= tmax) {
                 // Have to check inside the node
                 if (node->nPrimitives > 0) {
                     // Leaf node

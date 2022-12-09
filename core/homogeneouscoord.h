@@ -11,13 +11,14 @@ class Vector;
 
 class ALIGN(16) HomogeneousCoord {
 public:
+    float coords[4];
     HomogeneousCoord() {}
     HomogeneousCoord(float x, float y, float z, float w);
     explicit HomogeneousCoord(const Point& p);
     explicit HomogeneousCoord(const Vector& v);
 
     static HomogeneousCoord rep(float v) {
-        /* TODO */ NOT_IMPLEMENTED;
+        return HomogeneousCoord(v, v, v, v);
     }
 
     float& operator [] (int idx);
@@ -38,6 +39,8 @@ HomogeneousCoord operator * (float scalar, const HomogeneousCoord& b);
 HomogeneousCoord operator * (const HomogeneousCoord& a, float scalar);
 HomogeneousCoord operator / (const HomogeneousCoord& a, float scalar);
 float dot(const HomogeneousCoord& a, const HomogeneousCoord& b);
+float dot(const HomogeneousCoord& a, const Vector& b);
+float dot(const HomogeneousCoord& a, const Point& b);
 
 HomogeneousCoord min(const HomogeneousCoord& a, const HomogeneousCoord& b);
 HomogeneousCoord max(const HomogeneousCoord& a, const HomogeneousCoord& b);

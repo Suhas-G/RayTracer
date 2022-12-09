@@ -4,6 +4,7 @@
 #include <utility>
 #include <core/point.h>
 #include <core/vector.h>
+#include <vector>
 
 namespace rt {
 
@@ -22,6 +23,7 @@ public:
     {
         this->min = rt::min(min, max);
         this->max = rt::max(min, max);
+        ensureThickness();
     }
 
     static BBox empty();
@@ -43,12 +45,15 @@ public:
 
     bool isUnbound() const;
     Axis biggestDimensionAxis() const;
+    bool isEmpty() const;
+    Point center() const;
+    std::vector<Point> getCorners() const;
     friend std::ostream& operator<<(std::ostream& os, const BBox& box);
 private:
 //     bool isEmpty = false;
 //     bool isFull = false;
-    bool isEmpty() const;
     bool isFull() const;
+    void ensureThickness();
 };
 
 }

@@ -26,8 +26,26 @@ Intersection Quad::intersect(const Ray& ray, float tmin, float tmax) const {
     Intersection intersection = InfinitePlane::intersectWithPlane(ray, origin, normal, this, tmin, tmax);
     if (intersection) {
         Vector p = static_cast<Vector>(intersection.local());
-        float alpha = rt::dot(span1, p) * invSpan1LengthSqr;
-        float beta = rt::dot(span2, p) * invSpan2LengthSqr;
+        float alpha, beta;
+        float x1 = span1.x, y1 = span1.y, z1 = span1.z, x2 = span2.x, y2 = span2.y, z2 = span2.z, px = p.x, py = p.y, pz = p.z;
+        if (std::abs(x2 * y1 - x1 * y2) > rt::epsilon) {
+            beta = (px * y1 - py * x1) / (x2 * y1 - x1 * y2);
+        } else if (std::abs(x2 * z1 - x1 * z2) > rt::epsilon) {
+            beta = (px * z1 - pz * x1) / (x2 * z1 - x1 * z2);
+        } else {
+            // TODO: Is this correct??
+            beta = 0.0f;
+        }
+
+        if (std::abs(x1) > rt::epsilon) {
+            alpha = (px - beta * x2) / x1;
+        } else if (std::abs(y1) > rt::epsilon) {
+            alpha = (py - beta * y2) / y1;
+        } else if (std::abs(z1) > rt::epsilon) {
+            alpha = (pz - beta * z2) / z1;
+        } else {
+            alpha = 0.0f;
+        }
 
         if (alpha >= 0.0f && alpha <= 1.0f && beta >= 0.0f && beta <= 1.0f) {
             intersection.setLocal(Point(alpha, beta, 1.0f));

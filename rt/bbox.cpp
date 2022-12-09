@@ -7,7 +7,9 @@ namespace rt {
     BBox BBox::empty() {
         Point p1 = Point(0, 0, 0);
         Point p2 = Point(0, 0, 0);
-        BBox box(p1, p2);
+        BBox box;
+        box.min = p1;
+        box.max = p2;
         return box;
     }
 
@@ -28,6 +30,7 @@ namespace rt {
         } else if (!isFull()) {
             this->min = rt::min(this->min, point);
             this->max = rt::max(this->max, point);
+            ensureThickness();
         }
     }
 
@@ -38,6 +41,7 @@ namespace rt {
         } else if (!isFull()) {
             this->min = rt::min(this->min, bbox.min);
             this->max = rt::max(this->max, bbox.max);
+            ensureThickness();
         }
     }
 
@@ -112,6 +116,45 @@ namespace rt {
     bool BBox::isFull() const {
         return (std::isinf(min.x) && std::isinf(min.y) && std::isinf(min.z) &&
             std::isinf(max.x) && std::isinf(max.y) && std::isinf(max.z));
+    }
+
+    void BBox::ensureThickness() {
+        for (int i = 0; i < 3; i++) {
+            if (this->max[i] - this->min[i] < rt::epsilon) {
+                this->max[i] += (rt::epsilon);
+                this->min[i] -= (rt::epsilon);
+            }
+        }
+    }
+
+    Point BBox::center() const {
+        Point c;
+        // TODO: If only one side is infinity, then how to take center?
+        if (std::isinf(min.x) || std::isinf(max.x)) {
+            c.x = 0;
+        } else {
+            c.x = 0.5f * (min.x + max.x);
+        }
+
+        if (std::isinf(min.y) || std::isinf(max.y)) {
+            c.y = 0;
+        } else {
+            c.y = 0.5f * (min.y + max.y);
+        }
+
+        if (std::isinf(min.z) || std::isinf(max.z)) {
+            c.z = 0;
+        } else {
+            c.z = 0.5f * (min.z + max.z);
+        }
+
+        return c;
+    }
+
+    std::vector<Point> BBox::getCorners() const {
+        return std::vector<Point>({Point(min.x, min.y, min.z), Point(min.x, min.y, max.z), Point(min.x, max.y, min.z),
+                                    Point(min.x, max.y, max.z), Point(max.x, min.y, min.z), Point(max.x, min.y, max.z),
+                                    Point(max.x, max.y, min.z), Point(max.x, max.y, max.z)});
     }
 
     std::ostream& operator<<(std::ostream& os, const BBox& box) {
