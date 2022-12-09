@@ -4,6 +4,7 @@
 #include <utility>
 #include <core/point.h>
 #include <core/vector.h>
+#include <vector>
 
 namespace rt {
 
@@ -46,6 +47,7 @@ public:
     Axis biggestDimensionAxis() const;
     bool isEmpty() const;
     Point center() const;
+    std::vector<Point> getCorners() const;
     friend std::ostream& operator<<(std::ostream& os, const BBox& box);
 private:
 //     bool isEmpty = false;

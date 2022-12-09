@@ -1,5 +1,5 @@
 #include <rt/primmod/instance.h>
-
+#include <tuple>
 namespace rt {
 
 Instance::Instance(Primitive* content)
@@ -74,12 +74,16 @@ void Instance::setCoordMapper(CoordMapper* cm) {
 }
 
 Intersection Instance::intersect(const Ray& ray, float tmin, float tmax) const {
-    Ray transformedRay = ray.transform(this->transformation.invert());
+    Matrix inv = this->transformation.invert();
+    float transformedRayDirLength;
+    Ray transformedRay;
+    std::tie(transformedRay, transformedRayDirLength) = ray.transform(inv);
     // TODO: Check if tmin, tmax has to be modified
-    Intersection pIntersection = this->contentPrimitive->intersect(transformedRay, tmin, tmax);
+    Intersection pIntersection = this->contentPrimitive->intersect(transformedRay, tmin * transformedRayDirLength, tmax * transformedRayDirLength);
     if (pIntersection) {
         Point transformedHitpoint = this->transformation * pIntersection.hitPoint();
         float originalDistance = ray.getDistance(transformedHitpoint);
+        // Fixme: This is wrong. Ideally it should be inverse.transpose(). See slides.
         Vector transformedNormal = this->transformation * pIntersection.normal();
         return Intersection(originalDistance, ray, pIntersection.solid, transformedNormal, pIntersection.local());
     }
@@ -90,7 +94,12 @@ Intersection Instance::intersect(const Ray& ray, float tmin, float tmax) const {
 
 BBox Instance::getBounds() const {
     BBox primBounds = this->contentPrimitive->getBounds();
-    return BBox(this->transformation * primBounds.min, this->transformation * primBounds.max);
+    std::vector<Point> corners = primBounds.getCorners();
+    BBox box = BBox::empty();
+    for (const auto &p: corners) {
+        box.extend(this->transformation * p);
+    }
+    return box;
 }
 
 }

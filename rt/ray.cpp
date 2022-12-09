@@ -21,10 +21,11 @@ Point Ray::getPoint(float distance) const {
     return o + distance * d;
 }
 
-Ray Ray::transform(const Matrix& m) const {
+std::pair<Ray, float> Ray::transform(const Matrix& m) const {
     Point origin = m * this->o;
-    Vector dir = (m * this->d).normalize();
-    return Ray(origin, dir);
+    Vector dir = (m * this->d);
+    float length = dir.length();
+    return std::make_pair(Ray(origin, dir.normalize()), length);
 }
 
 float Ray::getDistance(const Point& p) const {

@@ -17,7 +17,7 @@ public:
     Ray() {}
     Ray(const Point& o, const Vector& d);
     Point getPoint(float distance) const;
-    Ray transform(const Matrix& m) const;
+    std::pair<Ray, float> transform(const Matrix& m) const;
     float getDistance(const Point& p) const;
 };
 

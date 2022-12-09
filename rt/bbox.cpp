@@ -151,6 +151,12 @@ namespace rt {
         return c;
     }
 
+    std::vector<Point> BBox::getCorners() const {
+        return std::vector<Point>({Point(min.x, min.y, min.z), Point(min.x, min.y, max.z), Point(min.x, max.y, min.z),
+                                    Point(min.x, max.y, max.z), Point(max.x, min.y, min.z), Point(max.x, min.y, max.z),
+                                    Point(max.x, max.y, min.z), Point(max.x, max.y, max.z)});
+    }
+
     std::ostream& operator<<(std::ostream& os, const BBox& box) {
         return os << "BBox(min: " << box.min << ", max: " << box.max << ")";
     }
