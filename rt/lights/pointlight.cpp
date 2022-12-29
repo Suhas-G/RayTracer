@@ -14,7 +14,7 @@ LightHit PointLight::getLightHit(const Point& p) const {
     Vector dir = p - this->position;
     float len = dir.length();
     dir = dir.normalize();
-    return LightHit({dir, len, dir});
+    return LightHit({-dir, len, dir});
 }
 
 RGBColor PointLight::getIntensity(const LightHit& irr) const {

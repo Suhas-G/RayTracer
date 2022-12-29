@@ -27,7 +27,7 @@ RGBColor RayTracingIntegrator::getRadiance(const Ray& ray) const {
                 if (!shadowIntersection) {
                     RGBColor intensity = light->getIntensity(lightHit);
                     RGBColor reflectance = intersection.solid->material->getReflectance(local, normal, -ray.d, invLightHitDir);
-                    color = color + (intensity * reflectance);
+                    color = color + (intensity * reflectance * rt::dot(lightHit.direction, lightHit.normal));
                 }
             }
         }
