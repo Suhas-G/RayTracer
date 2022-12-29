@@ -9,7 +9,7 @@ SpotLight::SpotLight(const Point& position, const Vector& direction, float angle
 
 RGBColor SpotLight::getIntensity(const LightHit& irr) const {
     /* TODO */
-    float cosIncomingAngle = rt::dot(irr.direction, this->direction);
+    float cosIncomingAngle = rt::dot(-irr.direction, this->direction);
     if (cosIncomingAngle >= this->cosAngle) {
         return ((intensity / (irr.distance * irr.distance)) * std::pow(cosIncomingAngle, exp));
     }
