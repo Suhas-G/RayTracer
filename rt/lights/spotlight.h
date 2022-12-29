@@ -12,6 +12,10 @@ public:
 	SpotLight() {}
 	SpotLight(const Point& position, const Vector& direction, float angle, float exp, const RGBColor& intensity);
     virtual RGBColor getIntensity(const LightHit& irr) const;
+private:
+	Vector direction;
+	float cosAngle;
+	float exp;
 };
 
 }

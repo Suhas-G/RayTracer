@@ -1,19 +1,24 @@
 #include <rt/materials/phong.h>
+#include <rt/textures/texture.h>
+#include <cmath>
+#include <core/scalar.h>
 
 namespace rt {
 
 PhongMaterial::PhongMaterial(Texture* specular, float exponent)
+: specular(specular), exponent(exponent)
 {
     /* TODO */
 }
 
 RGBColor PhongMaterial::getReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir, const Vector& inDir) const {
-    CG_UNUSED(texPoint);
-    CG_UNUSED(normal);
     CG_UNUSED(outDir);
-    CG_UNUSED(inDir);
 
-    /* TODO */ NOT_IMPLEMENTED;
+    /* TODO */
+    float inDotNormal = rt::dot(inDir, normal);
+    Vector RI = -inDir + 2 * (inDotNormal) * normal;
+    // Vector h = (inDir + outDir).normalize();
+    return specular->getColor(texPoint) * (std::pow(rt::clamp01(rt::dot(RI, outDir)), this->exponent)) / inDotNormal;
 }
 
 RGBColor PhongMaterial::getEmission(const Point& texPoint, const Vector& normal, const Vector& outDir) const {
@@ -21,7 +26,7 @@ RGBColor PhongMaterial::getEmission(const Point& texPoint, const Vector& normal,
     CG_UNUSED(normal);
     CG_UNUSED(outDir);
 
-    /* TODO */ NOT_IMPLEMENTED;
+    return RGBColor::rep(0.0f);
 }
 
 Material::SampleReflectance PhongMaterial::getSampleReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir) const {

@@ -13,6 +13,9 @@ public:
 	PointLight(const Point& position, const RGBColor& intensity);
 	virtual LightHit getLightHit(const Point& p) const;
     virtual RGBColor getIntensity(const LightHit& irr) const;
+protected:
+	Point position;
+	RGBColor intensity;
 };
 
 }
