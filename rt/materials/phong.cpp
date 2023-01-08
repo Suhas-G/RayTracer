@@ -16,9 +16,10 @@ RGBColor PhongMaterial::getReflectance(const Point& texPoint, const Vector& norm
 
     /* TODO */
     float inDotNormal = rt::dot(inDir, normal);
-    Vector RI = -inDir + 2 * (inDotNormal) * normal;
+    Vector RI = (-inDir + 2 * (inDotNormal) * normal).normalize();
     // Vector h = (inDir + outDir).normalize();
-    return specular->getColor(texPoint) * (std::pow(rt::clamp01(rt::dot(RI, outDir)), this->exponent)) / inDotNormal;
+    // FIXME: Not divided by inDotNormal as shown in slides as produces artifacts
+    return specular->getColor(texPoint) * (std::pow(rt::clamp01(rt::dot(RI, outDir)), this->exponent));
 }
 
 RGBColor PhongMaterial::getEmission(const Point& texPoint, const Vector& normal, const Vector& outDir) const {
