@@ -8,6 +8,8 @@ set(ASSIGNMENT_SOURCES
     core/interpolate.cpp
     core/interpolate-impl.h
     core/interpolate.h
+    core/random.cpp
+    core/random.h
     rt/coordmappers/coordmapper.h
     rt/coordmappers/cylindrical.cpp
     rt/coordmappers/cylindrical.h
