@@ -15,6 +15,7 @@ public:
     virtual Intersection intersect(const Ray& ray, float tmin = 0, float tmax = FLT_MAX) const;
     virtual Sample sample() const;
     virtual float getArea() const;
+    Point getBarycentricCoordinates(const Point& p);
 private:
     Point *vertices;
     Vector normal;
