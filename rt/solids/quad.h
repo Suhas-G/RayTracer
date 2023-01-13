@@ -1,6 +1,7 @@
 #ifndef CG1RAYTRACER_SOLIDS_QUAD_HEADER
 #define CG1RAYTRACER_SOLIDS_QUAD_HEADER
 
+#include <rt/solids/triangle.h>
 #include <rt/solids/solid.h>
 
 namespace rt {
@@ -23,6 +24,11 @@ private:
     float invSpan1LengthSqr;
     float invSpan2LengthSqr;
     BBox bounds;
+    Point b;
+    Point c;
+    Point d;
+    Triangle *t1;
+    Triangle *t2;
 };
 
 }

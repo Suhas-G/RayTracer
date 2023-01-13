@@ -10,7 +10,7 @@ static inline float noise(int x, int y, int z) {
 }
 
 PerlinTexture::PerlinTexture(const RGBColor& white, const RGBColor& black)
-{
+: white(white), black(black){
     /* TODO */
 }
 

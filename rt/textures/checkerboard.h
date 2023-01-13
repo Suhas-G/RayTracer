@@ -11,6 +11,10 @@ public:
     virtual RGBColor getColor(const Point& coord);
     virtual RGBColor getColorDX(const Point& coord);
     virtual RGBColor getColorDY(const Point& coord);
+private:
+    const RGBColor white;
+    const RGBColor black;
+    const float edgeLength = 0.5f;
 };
 
 }

@@ -48,11 +48,26 @@ Intersection Triangle::intersect(const Ray& ray, float tmin, float tmax) const {
         float b = rt::dot(normal, rt::cross(edge2, C2));
         float c = rt::dot(normal, rt::cross(edge3, C3));
         if (a > 0 && b > 0 && c > 0) {
-            intersection.setLocal(Point(a, b, c));
+            // FIXME: WHY??? If used (a, b, c) instead of (b, c, a) the local image output is wrong
+            intersection.setLocal(Point(b, c, a));
             return intersection;
         }
     }
     return Intersection::failure();
+}
+
+Point Triangle::getBarycentricCoordinates(const Point& p) {
+    /* TODO */
+    Vector C1 = p - vertices[0]; 
+    Vector C2 = p - vertices[1]; 
+    Vector C3 = p - vertices[2];
+    float a = rt::dot(normal, rt::cross(edge1, C1));
+    float b = rt::dot(normal, rt::cross(edge2, C2));
+    float c = rt::dot(normal, rt::cross(edge3, C3));
+    if (a > 0 && b > 0 && c > 0) {
+        return Point(a, b, c);
+    }
+    return Point(-1, -1, -1);
 }
 
 Solid::Sample Triangle::sample() const {
