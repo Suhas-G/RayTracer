@@ -21,7 +21,7 @@ Point PlaneCoordMapper::getCoords(const Intersection& hit) const {
     
     Point p = transformation * hit.local();
 
-    return Point(p.x, p.y, 0);
+    return p;
 }
 
 }
