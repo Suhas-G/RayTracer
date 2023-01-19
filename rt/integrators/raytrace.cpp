@@ -15,13 +15,8 @@ RGBColor RayTracingIntegrator::getRadiance(const Ray& ray) const {
     if (intersection) {
         Vector normal = intersection.normal();
         Point local;
-        // FIXME: First if condition is probably unnecessary
-        if (intersection.solid->texMapper == nullptr) {
-            local = intersection.hitPoint();
-        } else {
-            local = intersection.solid->texMapper->getCoords(intersection);
-        }
-        
+        rt_assert(intersection.solid->texMapper != nullptr);
+        local = intersection.solid->texMapper->getCoords(intersection);
         RGBColor emittance = intersection.solid->material->getEmission(local, normal, -ray.d);
         Point hitPoint = intersection.hitPoint();
         for (const auto& light : world->light) {
