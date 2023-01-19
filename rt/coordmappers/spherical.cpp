@@ -8,23 +8,20 @@ SphericalCoordMapper::SphericalCoordMapper(const Point& origin, const Vector& ze
 : origin(origin) {
     vscale = 1.0f / (rt::pi * zenith.length());
     uscale = 1.0f / (2 * rt::pi * azimuthRef.length());
-    this->yAxis = zenith.normalize();
-    this->zAxis = rt::cross(azimuthRef.normalize(), yAxis);
-    this->xAxis = rt::cross(yAxis, zAxis).normalize();
-    // this->xAxis = azimuthRef.normalize();
+    transformation = Matrix::system(azimuthRef.normalize(), zenith.normalize(), rt::cross(azimuthRef, zenith).normalize()).invert();
 }
 
 Point SphericalCoordMapper::getCoords(const Intersection& hit) const {
-    Vector local = hit.hitPoint() - origin;
+    Vector local = transformation * (hit.hitPoint() - origin);
+
+
     float dist = local.length();
-    float phi = std::acos(rt::dot(local, -this->yAxis) / dist);
-    float v = phi  * vscale;
-    float xProj = rt::dot(local, this->xAxis);
-    float zProj = rt::dot(local, this->zAxis);
-    float theta = rt::pi + std::atan2(xProj, zProj);
+    float phi = std::acos(local.y / dist);
+    float v = phi * vscale;
+    float theta = rt::pi + std::atan2(local.z, local.x);
     float u = theta * uscale;
 
-    return Point(u, v, 0);
+    return Point(u, v, dist);
 }
 
 }

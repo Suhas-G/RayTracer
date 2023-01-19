@@ -14,9 +14,7 @@ public:
     virtual Point getCoords(const Intersection& hit) const;
 private:
     Point origin;
-    Vector xAxis;
-    Vector yAxis;
-    Vector zAxis;
+    Matrix transformation;
     float uscale;
     float vscale;
 };
