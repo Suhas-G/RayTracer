@@ -49,19 +49,6 @@ Intersection Quad::intersect(const Ray& ray, float tmin, float tmax) const {
             return intersection;
         }
     }
-    // Intersection t1_intersect = t1->intersect(ray, tmin, tmax);
-    // if (t1_intersect) {
-    //     Vector hp = t1_intersect.hitPoint() - origin;
-    //     Point local = Point(dot(hp, span1) / span1.lensqr(), dot(hp, span2) / span2.lensqr(), 0);
-    //     return Intersection(t1_intersect.distance, ray, this, t1_intersect.normal(), local);
-    // }
-    
-    // Intersection t2_intersect = t2->intersect(ray, tmin, tmax);
-    // if (t2_intersect) {
-    //     Vector hp = t2_intersect.hitPoint() - origin;
-    //     Point local = Point(dot(hp, span1) / span1.lensqr(), dot(hp, span2) / span2.lensqr(), 0);
-    //     return Intersection(t2_intersect.distance, ray, this, t2_intersect.normal(), local);
-    // }
 
     return Intersection::failure();
 }

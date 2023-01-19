@@ -1,5 +1,6 @@
 #include <core/scalar.h>
 #include <core/image.h>
+#include <core/random.h>
 #include <rt/renderer.h>
 #include <rt/ray.h>
 #include <rt/cameras/camera.h>
@@ -18,14 +19,39 @@ void Renderer::render(Image& img) {
     const auto width = img.width();
     const auto height = img.height();
     float ndcx, ndcy, sscx, sscy;
+
+    rt::uint verticalSamples = static_cast<rt::uint>(std::floor(std::sqrt(samples)));
+    // FIXME: The extra samples is probably wrong
+    rt::uint horizontalSamples = verticalSamples + (samples - (verticalSamples * verticalSamples));
+    float sampleHeight = 1.0f / verticalSamples;
+    float sampleWidth = 1.0f / horizontalSamples;
+
     for (rt::uint x = 0; x < width; x++) {
         for (rt::uint y = 0; y < height; y++) {
-            ndcx = (x + 0.5f) / width;
-            ndcy = (y + 0.5f) / height;
-            sscx = (ndcx * 2) - 1;
-            sscy = (ndcy * 2) - 1;
-            Ray ray = cam->getPrimaryRay(sscx, sscy);
-            img(x, height - y - 1, integrator->getRadiance(ray));
+            if (samples == 1) {
+                ndcx = (x + 0.5f) / width;
+                ndcy = (y + 0.5f) / height;
+                sscx = (ndcx * 2) - 1;
+                sscy = (ndcy * 2) - 1;
+                Ray ray = cam->getPrimaryRay(sscx, sscy);
+                img(x, height - y - 1, integrator->getRadiance(ray));
+            } else {
+                
+                RGBColor color = RGBColor::rep(0.0f);
+                for (rt::uint i = 0; i < horizontalSamples; i++) {
+                    for (rt::uint j = 0; j < verticalSamples; j++) {
+                        float xOffset = (i * sampleWidth) + (rt::random() * sampleWidth);
+                        float yOffset = (j * sampleHeight) + (rt::random() * sampleHeight);
+                        ndcx = (x + xOffset) / width;
+                        ndcy = (y + yOffset) / height;
+                        sscx = (ndcx * 2) - 1;
+                        sscy = (ndcy * 2) - 1;
+                        Ray ray = cam->getPrimaryRay(sscx, sscy);
+                        color = color + (1.0f/samples) * integrator->getRadiance(ray);
+                    }
+                }
+                img(x, height - y - 1, color);
+            }
         }
     }
 }

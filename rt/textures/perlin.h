@@ -1,6 +1,7 @@
 #ifndef CG1RAYTRACER_TEXTURES_PERLIN_HEADER
 #define CG1RAYTRACER_TEXTURES_PERLIN_HEADER
 
+#include <vector>
 #include <rt/textures/texture.h>
 
 namespace rt {
@@ -15,6 +16,7 @@ public:
 private:
     RGBColor white;
     RGBColor black;
+    std::vector<std::tuple<float, float>> frequency_amplitude;
 };
 
 }

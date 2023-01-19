@@ -12,21 +12,13 @@ CheckerboardTexture::CheckerboardTexture(const RGBColor& white, const RGBColor& 
 
 RGBColor CheckerboardTexture::getColor(const Point& coord) {
 
-    /* TODO */
-    // bool xless = (coord.x - std::floor(coord.x)) <= this->edgeLength;
-    // bool yless = (coord.y - std::floor(coord.y)) <= this->edgeLength;
-    // bool zless = (coord.z - std::floor(coord.z)) <= this->edgeLength;
-
-    // // || (xless && !yless && !zless) || (!xless && yless && !zless) || (!xless && !yless && zless)
-    // if ((xless && yless && zless) || (xless && !yless && !zless) || (!xless && yless && !zless)) {
-    //     return white;
-    // } else {
-    //     return black;
-    // }
-    if (((int)std::floor(coord.x * 0.5f) + (int)std::floor(coord.y * 0.5f) + (int)std::floor(coord.z * 0.5f)) % 2 == 0) {
-        return black;
-    } else {
+    int x = std::abs(std::floor(coord.x * 2));
+    int y = std::abs(std::floor(coord.y * 2));
+    int z = std::abs(std::floor(coord.z * 2));
+    if ((x + y + z) % 2 == 0) {
         return white;
+    } else {
+        return black;
     }
 }
 

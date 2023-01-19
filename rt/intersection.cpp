@@ -8,11 +8,11 @@ Intersection::Intersection(float distance, const Ray& ray, const Solid* solid, c
 }
 
 Intersection::operator bool() const {
-    return !(std::isinf(distance));
+    return solid != nullptr;
 }
 
 Intersection Intersection::failure() {
-    return Intersection(std::numeric_limits<float>::infinity());
+    return Intersection(std::numeric_limits<float>::infinity(), nullptr);
 }
 
 Point Intersection::hitPoint() const {

@@ -21,4 +21,9 @@ float clamp01(const float &x) {
     return std::max(std::min(x, 1.0f), 0.0f); 
 }
 
+template <typename T>
+T clamp(T val, T min, T max) {
+    return std::min(std::max(val, max), min);
+}
+
 }

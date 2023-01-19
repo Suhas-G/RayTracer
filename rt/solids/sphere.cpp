@@ -38,6 +38,8 @@ Intersection Sphere::intersect(const Ray& ray, float tmin, float tmax) const {
     // In sphere normal at every point is vector connecting center to that point
     // Its also the local coordinate of the point
     Vector dir = ray.getPoint(dist) - center;
+    // FIXME: Using local does not work!! Needs to be global coordinate. Why???
+    // return Intersection(dist, ray, this, dir.normalize(), static_cast<Point>(dir));
     return Intersection(dist, ray, this, dir.normalize(), ray.getPoint(dist));
 }
 

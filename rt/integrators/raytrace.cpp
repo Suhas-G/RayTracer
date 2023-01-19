@@ -4,6 +4,7 @@
 #include <rt/lights/light.h>
 #include <rt/solids/solid.h>
 #include <rt/materials/material.h>
+#include <rt/coordmappers/coordmapper.h>
 
 namespace rt {
 
@@ -13,7 +14,14 @@ RGBColor RayTracingIntegrator::getRadiance(const Ray& ray) const {
     Intersection intersection = world->scene->intersect(ray);
     if (intersection) {
         Vector normal = intersection.normal();
-        Point local = intersection.local();
+        Point local;
+        // FIXME: First if condition is probably unnecessary
+        if (intersection.solid->texMapper == nullptr) {
+            local = intersection.hitPoint();
+        } else {
+            local = intersection.solid->texMapper->getCoords(intersection);
+        }
+        
         RGBColor emittance = intersection.solid->material->getEmission(local, normal, -ray.d);
         Point hitPoint = intersection.hitPoint();
         for (const auto& light : world->light) {

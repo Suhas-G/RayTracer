@@ -1,6 +1,7 @@
 #ifndef CG1RAYTRACER_TEXTURES_IMAGETEX_HEADER
 #define CG1RAYTRACER_TEXTURES_IMAGETEX_HEADER
 
+#include <tuple>
 #include <core/image.h>
 #include <rt/textures/texture.h>
 
@@ -25,6 +26,14 @@ public:
     virtual RGBColor getColor(const Point& coord);
     virtual RGBColor getColorDX(const Point& coord);
     virtual RGBColor getColorDY(const Point& coord);
+    
+private:
+    Image image;
+    BorderHandlingType bh;
+    InterpolationType interpolation;
+
+    std::tuple<float, float> normalizeCoords(float x, float y);
+    RGBColor interpolate(float tu, float tv);
 };
 
 }
