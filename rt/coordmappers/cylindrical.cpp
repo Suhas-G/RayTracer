@@ -18,7 +18,7 @@ Point CylindricalCoordMapper::getCoords(const Intersection& hit) const {
     float v = rt::dot(local, this->yAxis) * yscale;
     float xProj = rt::dot(local, this->xAxis);
     float zProj = rt::dot(local, this->zAxis);
-    float theta = rt::pi + std::atan2(xProj, zProj);
+    float theta = rt::pi + std::atan2(zProj, xProj);
     float u = theta * xscale;
 
     return Point(u, v, 0);
