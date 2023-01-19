@@ -16,7 +16,7 @@ Point SphericalCoordMapper::getCoords(const Intersection& hit) const {
 
 
     float dist = local.length();
-    float phi = std::acos(local.y / dist);
+    float phi = rt::pi + std::atan2(std::sqrt((local.x * local.x) + (local.z * local.z)), local.y);
     float v = phi * vscale;
     float theta = rt::pi + std::atan2(local.z, local.x);
     float u = theta * uscale;
