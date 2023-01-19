@@ -8,7 +8,11 @@ SphericalCoordMapper::SphericalCoordMapper(const Point& origin, const Vector& ze
 : origin(origin) {
     vscale = 1.0f / (rt::pi * zenith.length());
     uscale = 1.0f / (2 * rt::pi * azimuthRef.length());
-    transformation = Matrix::system(azimuthRef.normalize(), zenith.normalize(), rt::cross(azimuthRef, zenith).normalize()).invert();
+    Vector xAxis = azimuthRef.normalize();
+    Vector yAxis = zenith.normalize();
+    Vector zAxis = rt::cross(xAxis, yAxis);
+    xAxis = rt::cross(yAxis, zAxis);
+    transformation = Matrix::system(xAxis, yAxis, zAxis).invert();
 }
 
 Point SphericalCoordMapper::getCoords(const Intersection& hit) const {
