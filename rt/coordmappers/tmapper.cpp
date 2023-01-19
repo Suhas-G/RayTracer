@@ -18,7 +18,9 @@ TriangleMapper::TriangleMapper(const Point& tv0, const Point& tv1, const Point& 
 
 Point TriangleMapper::getCoords(const Intersection& hit) const {
     Point local = hit.local();
-    return Point(local.x * v0.x + local.y * v1.x + local.z * v2.x, local.x * v0.y + local.y * v1.y + local.z * v2.y, 0.0f);
+    return Point(local.x * v0.x + local.y * v1.x + local.z * v2.x, 
+                 local.x * v0.y + local.y * v1.y + local.z * v2.y, 
+                 local.x * v0.z + local.y * v1.z + local.z * v2.z);
 }
 
 }
