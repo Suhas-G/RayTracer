@@ -16,7 +16,7 @@ public:
     float distance;
 
     Intersection() {}
-    Intersection(float distance): distance(distance) {}
+    Intersection(float distance, Solid* solid): solid(solid), distance(distance) {}
     static Intersection failure();
     Intersection(float distance, const Ray& ray, const Solid* solid, const Vector& normal, const Point& uv);
 

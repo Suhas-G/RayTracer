@@ -44,6 +44,8 @@ static const float OFFSET_MULTIPLIER = 100.0f;
 typedef unsigned int uint;
 
 float clamp01(const float &x);
+
+
 }
 
 #endif

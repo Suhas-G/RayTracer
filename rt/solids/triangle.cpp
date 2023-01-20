@@ -48,7 +48,10 @@ Intersection Triangle::intersect(const Ray& ray, float tmin, float tmax) const {
         float b = rt::dot(normal, rt::cross(edge2, C2));
         float c = rt::dot(normal, rt::cross(edge3, C3));
         if (a > 0 && b > 0 && c > 0) {
-            intersection.setLocal(Point(a, b, c));
+            // FIXME: WHY??? If used (a, b, c) instead of (b, c, a) the local image output is wrong
+            Point local = Point(b, c, a);
+            // Normalise by the length of the normal. https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/barycentric-coordinates.html
+            intersection.setLocal(local * (1.0f / (area * 2.0f)));
             return intersection;
         }
     }
@@ -64,7 +67,9 @@ Point Triangle::getBarycentricCoordinates(const Point& p) {
     float b = rt::dot(normal, rt::cross(edge2, C2));
     float c = rt::dot(normal, rt::cross(edge3, C3));
     if (a > 0 && b > 0 && c > 0) {
-        return Point(a, b, c);
+        Point local = Point(b, c, a)* (1.0f / (area * 2.0f));
+        // return Point(a, b, c);
+        return local;
     }
     return Point(-1, -1, -1);
 }

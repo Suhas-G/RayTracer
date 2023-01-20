@@ -24,9 +24,11 @@ private:
     float invSpan1LengthSqr;
     float invSpan2LengthSqr;
     BBox bounds;
+    Point b;
+    Point c;
+    Point d;
     Triangle *t1;
     Triangle *t2;
-
 };
 
 }

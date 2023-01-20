@@ -1,5 +1,7 @@
 #include <rt/solids/quad.h>
+#include <rt/solids/triangle.h>
 #include <rt/solids/infiniteplane.h>
+#include <core/miscellaneous.h>
 
 namespace rt {
 
@@ -10,7 +12,6 @@ Quad::Quad(const Point& origin, const Vector& span1, const Vector& span2, CoordM
     normal = normal.normalize();
     invSpan1LengthSqr = 1.0f / span1.lensqr();
     invSpan2LengthSqr = 1.0f / span2.lensqr();
-    Point b, c, d;
     b = origin + span1;
     c = origin + span2;
     d = origin + (span1 + span2);
@@ -18,13 +19,14 @@ Quad::Quad(const Point& origin, const Vector& span1, const Vector& span2, CoordM
 
     this->t1 = new Triangle(origin, c, d, texMapper, material);
     this->t2 = new Triangle(d, b, origin, texMapper, material);
-
 }
 
 BBox Quad::getBounds() const {
     /* TODO */
     return bounds;
 }
+
+
 
 Intersection Quad::intersect(const Ray& ray, float tmin, float tmax) const {
     Intersection intersection = InfinitePlane::intersectWithPlane(ray, origin, normal, this, tmin, tmax);

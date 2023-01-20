@@ -1,6 +1,7 @@
 #include <cmath>
 #include <core/miscellaneous.h>
 #include <core/assert.h>
+#include <core/scalar.h>
 
 
 namespace rt
@@ -48,5 +49,18 @@ namespace rt
         rt_assert(temp != 0);
         return std::make_tuple(true, temp / a, c / temp);
 
+    }
+
+    template <typename T>
+    T clamp(T val, T min, T max) {
+        return std::max(std::min(val, max), min);
+    }
+
+    Point cartesianToSpherical(const Point &p) {
+        float dist = p.distance();
+        float theta = std::acos(rt::clamp(p.y, -1.0f, 1.0f) / dist);
+        float phi = std::atan2(p.z, p.x);
+        phi = phi < 0 ? rt::pi + phi : phi;
+        return Point(phi / (2 * rt::pi), theta / rt::pi, dist);
     }
 }
