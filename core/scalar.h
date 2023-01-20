@@ -45,8 +45,7 @@ typedef unsigned int uint;
 
 float clamp01(const float &x);
 
-template<typename T>
-T clamp(T val, T min, T max);
+
 }
 
 #endif

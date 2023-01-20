@@ -4,6 +4,11 @@ set(MY_ADDITIONAL_SOURCES
     # Please add your source files here
     core/miscellaneous.h
     core/miscellaneous.cpp
+    rt/solids/environment.h
+    rt/solids/environment.cpp
+    rt/coordmappers/environment.h
+    rt/coordmappers/environment.cpp
+    main/a_extra_credits.cpp
 )
 
 set(ASSIGNMENT_SOURCES
@@ -42,5 +47,6 @@ set(ASSIGNMENT_SOURCES
 
 file(COPY
     models/stones_diffuse.png
+    models/thatch_chapel_4k.png
     DESTINATION ${CMAKE_BINARY_DIR}/models
 )
