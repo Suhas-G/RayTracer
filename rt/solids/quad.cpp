@@ -18,7 +18,7 @@ Quad::Quad(const Point& origin, const Vector& span1, const Vector& span2, CoordM
     bounds = BBox(rt::min(rt::min(origin, b), rt::min(c, d)), rt::max(rt::max(origin, b), rt::max(c, d)));
 
     this->t1 = new Triangle(origin, c, d, texMapper, material);
-	this->t2 = new Triangle(d, b, origin, texMapper, material);
+    this->t2 = new Triangle(d, b, origin, texMapper, material);
 }
 
 BBox Quad::getBounds() const {
