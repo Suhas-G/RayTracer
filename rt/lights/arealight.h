@@ -1,11 +1,10 @@
 #ifndef CG1RAYTRACER_LIGHTS_AREALIGHT_HEADER
 #define CG1RAYTRACER_LIGHTS_AREALIGHT_HEADER
 
+#include <rt/solids/solid.h>
 #include <rt/lights/light.h>
 
 namespace rt {
-
-class Solid;
 
 class AreaLight : public Light {
 public:
@@ -13,6 +12,8 @@ public:
     AreaLight(Solid* source);
     virtual LightHit getLightHit(const Point& p) const;
     virtual RGBColor getIntensity(const LightHit& irr) const;
+private:
+    Solid* source;
 };
 
 }
