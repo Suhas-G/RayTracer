@@ -49,7 +49,7 @@ Intersection Triangle::intersect(const Ray& ray, float tmin, float tmax) const {
         float c = rt::dot(normal, rt::cross(edge3, C3));
         if (a > 0 && b > 0 && c > 0) {
             // FIXME: WHY??? If used (a, b, c) instead of (b, c, a) the local image output is wrong
-            Point local = Point(b, c, a);
+            Point local = Point(a, b, c);
             // Normalise by the length of the normal. https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/barycentric-coordinates.html
             intersection.setLocal(local * (1.0f / (area * 2.0f)));
             return intersection;

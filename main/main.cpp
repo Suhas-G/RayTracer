@@ -11,10 +11,9 @@ void a_mappers();
 void a_distributed();
 void a_smooth();
 void a_bumpmappers();
+void a_trial();
 
 int main(int /*argc*/, char** /*argv*/) {
-    a_textures();
-    a_local();
-    a_mappers();
+    a_trial();
     return 0;
 }
