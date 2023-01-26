@@ -13,6 +13,10 @@ public:
     virtual RGBColor getEmission(const Point& texPoint, const Vector& normal, const Vector& outDir) const;
     virtual SampleReflectance getSampleReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir) const;
     virtual Sampling useSampling() const;
+private:
+    float eta_r;
+    float eta_i = 1.0f;
+    float eta_t;
 };
 
 }

@@ -21,6 +21,15 @@ public:
     );
 
     virtual Ray getPrimaryRay(float x, float y) const;
+private:
+    Point center;
+    Vector forward;
+    Vector up;
+    Vector left;
+    float aspectRatio;
+    float focalLength;
+    float distanceAlongRay;
+    float apertureRadius;
 };
 
 }

@@ -47,6 +47,8 @@ float clamp01(const float &x);
 
 inline bool approxEquals(float v1, float v2) {return std::abs(v1 - v2) < rt::epsilon;}
 
+inline float sqr(float x) { return x * x;}
+
 
 }
 

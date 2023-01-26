@@ -5,10 +5,16 @@
 
 namespace rt {
 
+class Solid;
+
 class RecursiveRayTracingIntegrator : public Integrator {
 public:
     RecursiveRayTracingIntegrator(World* world) : Integrator(world) {}
     virtual RGBColor getRadiance(const Ray& ray) const;
+
+private:
+    bool textureMaterialPresent(const Solid* solid) const;
+    RGBColor getRadianceRecursive(const Ray& ray, int depth) const;
 };
 
 }

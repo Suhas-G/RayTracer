@@ -3,6 +3,7 @@
 #include <core/color.h>
 #include <rt/world.h>
 #include <rt/groups/simplegroup.h>
+#include <rt/groups/bvh.h>
 #include <rt/cameras/perspective.h>
 #include <rt/cameras/dofperspective.h>
 #include <rt/textures/constant.h>
@@ -34,7 +35,8 @@ void makeBox(Group* scene, const Point& aaa, const Vector& forward, const Vector
 void renderCornellbox(float scale, const char* filename, Camera* cam, Material* sphereMaterial, Material* floorMaterial, int numSamples=1) {
     Image img(400, 400);
     World world;
-    SimpleGroup* scene = new SimpleGroup();
+    // SimpleGroup* scene = new SimpleGroup();
+    BVH* scene = new BVH();
     world.scene = scene;
 
     Texture* redtex    = new ConstantTexture(RGBColor(.7f,0.f,0.f));
@@ -78,6 +80,7 @@ void renderCornellbox(float scale, const char* filename, Camera* cam, Material* 
     world.light.push_back(new PointLight(Point(40*scale,159.99f*scale,249.5f*scale),RGBColor(5000.0f*scale*scale,30000.0f*scale*scale,5000.0f*scale*scale)));
 
     RecursiveRayTracingIntegrator integrator(&world);
+    scene->rebuildIndex();
 
     Renderer engine(cam, &integrator);
     if (numSamples>1)
@@ -103,5 +106,5 @@ void a_distributed() {
     renderCornellbox(0.001f, "distributed-a.exr", cam, sphereMaterial1, floorMaterial1, 30);
     renderCornellbox(0.001f, "distributed-b.exr", cam, sphereMaterial2, floorMaterial2, 30);
     renderCornellbox(0.001f, "distributed-c.exr", dofcam, sphereMaterial2, floorMaterial2, 30);
-    renderCornellbox(0.001f, "distributed-d.exr", dofcam, sphereMaterial2, floorMaterial2, 1000);
+    // renderCornellbox(0.001f, "distributed-d.exr", dofcam, sphereMaterial2, floorMaterial2, 1000);
 }

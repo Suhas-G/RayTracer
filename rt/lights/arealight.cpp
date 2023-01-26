@@ -20,7 +20,7 @@ LightHit AreaLight::getLightHit(const Point& p) const {
 
 RGBColor AreaLight::getIntensity(const LightHit& irr) const {
     // FIXME: Dummy values used for now
-    float val = std::abs(rt::dot(-irr.direction, irr.normal));
+    float val = std::abs(rt::dot(-irr.direction.normalize(), irr.normal.normalize()));
     RGBColor emission = source->material->getEmission(Point::rep(0.0f), Vector::rep(0.0f), Vector::rep(0.0f));
     float lightArea = std::abs(source->getArea());
     return  (emission * lightArea * val) / (irr.distance * irr.distance);
