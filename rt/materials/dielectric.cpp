@@ -58,7 +58,7 @@ namespace rt {
         float rParallel = 0;
         float rPerp = 0;
 
-        std::tie(rParallel, rPerp) = dielectricFresnel(_eta_i, _eta_t, sin, std::sqrt(1 - rt::sqr(cos_t)));
+        std::tie(rParallel, rPerp) = dielectricFresnel(_eta_i, _eta_t, cos, cos_t);
 
         float fr = 0.5f * (rt::sqr(rParallel) + rt::sqr(rPerp));
 
