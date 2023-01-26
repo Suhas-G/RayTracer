@@ -7,7 +7,7 @@
 namespace rt {
 
 FuzzyConductorMaterial::FuzzyConductorMaterial(float eta, float kappa, float fuzzyangle)
-: eta(1.0f / eta), kappa(kappa), fuzzyangleTan(std::tan(fuzzyangle))
+: eta(eta), kappa(kappa), fuzzyangleTan(std::tan(fuzzyangle))
 {
     etaPlusKappaSqr = (this->eta * this->eta) + (kappa * kappa);
 }
@@ -17,7 +17,7 @@ RGBColor FuzzyConductorMaterial::getReflectance(const Point& texPoint, const Vec
     CG_UNUSED(outDir);
     /* TODO */ 
     
-    float cos = rt::dot(normal.normalize(), inDir.normalize());
+    float cos = std::sqrt(1 - rt::sqr(rt::dot(normal.normalize(), inDir.normalize())));
 
     float rParallel = (etaPlusKappaSqr * rt::sqr(cos) - (2 * eta * cos) + 1) / (etaPlusKappaSqr * rt::sqr(cos) + (2 * eta * cos) + 1);
     float rPerp = (etaPlusKappaSqr - (2 * eta * cos) + rt::sqr(cos)) / (etaPlusKappaSqr + (2 * eta * cos) + rt::sqr(cos));
