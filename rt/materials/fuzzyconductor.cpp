@@ -7,9 +7,9 @@
 namespace rt {
 
 FuzzyConductorMaterial::FuzzyConductorMaterial(float eta, float kappa, float fuzzyangle)
-: eta(eta), kappa(kappa), fuzzyangleTan(std::tan(fuzzyangle))
+: eta(1.0f / eta), kappa(kappa), fuzzyangleTan(std::tan(fuzzyangle))
 {
-    etaPlusKappaSqr = (eta * eta) + (kappa * kappa);
+    etaPlusKappaSqr = (this->eta * this->eta) + (kappa * kappa);
 }
 
 RGBColor FuzzyConductorMaterial::getReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir, const Vector& inDir) const {
