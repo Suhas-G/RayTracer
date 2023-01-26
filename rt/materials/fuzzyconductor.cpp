@@ -16,15 +16,8 @@ RGBColor FuzzyConductorMaterial::getReflectance(const Point& texPoint, const Vec
     CG_UNUSED(texPoint);
     CG_UNUSED(outDir);
     /* TODO */ 
-    
-    float cos = std::sqrt(1 - rt::sqr(rt::dot(normal.normalize(), inDir.normalize())));
 
-    float rParallel = (etaPlusKappaSqr * rt::sqr(cos) - (2 * eta * cos) + 1) / (etaPlusKappaSqr * rt::sqr(cos) + (2 * eta * cos) + 1);
-    float rPerp = (etaPlusKappaSqr - (2 * eta * cos) + rt::sqr(cos)) / (etaPlusKappaSqr + (2 * eta * cos) + rt::sqr(cos));
-
-    float fr = 0.5f * (rt::sqr(rParallel) + rt::sqr(rPerp));
-
-    return RGBColor::rep(fr);
+    return RGBColor::rep(0.0f);
 
 }
 
@@ -34,6 +27,16 @@ RGBColor FuzzyConductorMaterial::getEmission(const Point& texPoint, const Vector
     CG_UNUSED(outDir);
     /* TODO */
     return RGBColor::rep(0.0f);
+}
+
+static float fuzzyConductorFresnel(const Vector& normal, const Vector& reflected, float etaPlusKappaSqr, float eta) {
+    float cos = rt::dot(normal.normalize(), reflected);
+
+    float rParallelSqr = (etaPlusKappaSqr * rt::sqr(cos) - (2 * eta * cos) + 1) / (etaPlusKappaSqr * rt::sqr(cos) + (2 * eta * cos) + 1);
+    float rPerpSqr = (etaPlusKappaSqr - (2 * eta * cos) + rt::sqr(cos)) / (etaPlusKappaSqr + (2 * eta * cos) + rt::sqr(cos));
+
+    float fr = 0.5f * (rParallelSqr + rPerpSqr);
+    return fr;
 }
 
 Material::SampleReflectance FuzzyConductorMaterial::getSampleReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir) const {
@@ -61,7 +64,9 @@ Material::SampleReflectance FuzzyConductorMaterial::getSampleReflectance(const P
 
     Vector fuzzyReflected = (p - texPoint).normalize();
 
-    return SampleReflectance{fuzzyReflected, this->getReflectance(texPoint, _normal, outDir, fuzzyReflected)};
+    float fr = fuzzyConductorFresnel(_normal, fuzzyReflected, etaPlusKappaSqr, eta);
+
+    return SampleReflectance{fuzzyReflected, RGBColor::rep(fr)};
 }
 
 Material::Sampling FuzzyConductorMaterial::useSampling() const {
