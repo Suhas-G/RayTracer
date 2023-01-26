@@ -17,7 +17,7 @@ namespace rt {
         CG_UNUSED(outDir);
         CG_UNUSED(inDir);
 
-        return RGBColor::rep(1.0f);
+        return RGBColor::rep(0.0f);
     }
 
     RGBColor DielectricMaterial::getEmission(const Point& texPoint, const Vector& normal, const Vector& outDir) const {

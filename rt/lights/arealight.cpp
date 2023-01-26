@@ -11,9 +11,6 @@ LightHit AreaLight::getLightHit(const Point& p) const {
     // is not considered for shadow intersection
     float len = (dir - (10 * rt::epsilon * dir)).length();
     dir = dir.normalize();
-    if (rt::dot(dir, sample.normal) < 0) {
-        sample.normal = -sample.normal;
-    }
 
     return LightHit{dir, len, sample.normal};
 }
