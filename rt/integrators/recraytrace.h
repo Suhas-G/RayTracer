@@ -12,6 +12,8 @@ public:
     RecursiveRayTracingIntegrator(World* world) : Integrator(world) {}
     virtual RGBColor getRadiance(const Ray& ray) const;
 
+    void setRecursionDepth(int depth);
+
 private:
     bool textureMaterialPresent(const Solid* solid) const;
     RGBColor getRadianceRecursive(const Ray& ray, int depth) const;
