@@ -15,6 +15,7 @@ public:
 private:
     bool textureMaterialPresent(const Solid* solid) const;
     RGBColor getRadianceRecursive(const Ray& ray, int depth) const;
+    int recursionDepth = 6;
 };
 
 }

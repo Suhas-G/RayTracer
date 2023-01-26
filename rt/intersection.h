@@ -25,6 +25,7 @@ public:
     Point local() const;
 
     void setLocal(Point uv);
+    void setNormal(Vector normal);
 
     operator bool() const; //this allows intersection object to be put directly in conditional statements. Becomes true if there is an intersection
 

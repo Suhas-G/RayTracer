@@ -48,7 +48,7 @@ RGBColor RecursiveRayTracingIntegrator::getRadiance(const Ray& ray) const {
 RGBColor RecursiveRayTracingIntegrator::getRadianceRecursive(const Ray& ray, int depth) const {
     RGBColor color = RGBColor::rep(0.0f);
 
-    if (depth > 6) {
+    if (depth > this->recursionDepth) {
         return color;
     }
 

@@ -16,7 +16,7 @@ public:
     virtual Sample sample() const;
     virtual float getArea() const;
     Point getBarycentricCoordinates(const Point& p);
-private:
+protected:
     Point *vertices;
     Vector normal;
     float area;
