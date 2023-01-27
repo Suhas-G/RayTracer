@@ -11,7 +11,7 @@ SphericalCoordMapper::SphericalCoordMapper(const Point& origin, const Vector& ze
     Vector xAxis = azimuthRef.normalize();
     Vector yAxis = zenith.normalize();
     Vector zAxis = rt::cross(xAxis, yAxis).normalize();
-    xAxis = rt::cross(yAxis, zAxis);
+    // xAxis = rt::cross(yAxis, zAxis).normalize();
     transformation = Matrix::system(xAxis, yAxis, zAxis).invert();
 }
 
