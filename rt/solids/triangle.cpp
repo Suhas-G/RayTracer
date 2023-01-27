@@ -1,5 +1,6 @@
 #include <rt/solids/triangle.h>
 #include <rt/solids/infiniteplane.h>
+#include <core/random.h>
 namespace rt {
 
 Triangle::Triangle(Point vertices[3], CoordMapper* texMapper, Material* material)
@@ -75,7 +76,13 @@ Point Triangle::getBarycentricCoordinates(const Point& p) {
 }
 
 Solid::Sample Triangle::sample() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    float a = rt::random();
+    float b = rt::random(1 - a);
+    float c = 1 - a - b;
+
+    Point p = a * vertices[0] + b * vertices[1] + c * vertices[2];
+
+    return Sample{p, normal};
 }
 
 float Triangle::getArea() const {

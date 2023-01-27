@@ -31,4 +31,8 @@ void Intersection::setLocal(Point uv) {
     this->_local = uv;
 }
 
+void Intersection::setNormal(Vector normal) {
+    this->_normal = normal;
+}
+
 }

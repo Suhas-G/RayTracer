@@ -2,7 +2,7 @@
 #include <rt/solids/triangle.h>
 #include <rt/solids/infiniteplane.h>
 #include <core/miscellaneous.h>
-
+#include <core/random.h>
 namespace rt {
 
 Quad::Quad(const Point& origin, const Vector& span1, const Vector& span2, CoordMapper* texMapper, Material* material)
@@ -54,7 +54,11 @@ Intersection Quad::intersect(const Ray& ray, float tmin, float tmax) const {
 }
 
 Solid::Sample Quad::sample() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    float a = rt::random();
+    float b = rt::random();
+
+    Point p = origin + (a * span1) + (b * span2);
+    return Sample{p, normal};
 }
 
 float Quad::getArea() const {
