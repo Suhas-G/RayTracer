@@ -10,6 +10,7 @@
 
 #include <rt/cameras/perspective.h>
 #include <rt/groups/simplegroup.h>
+#include <rt/groups/bvh.h>
 
 #include <rt/solids/triangle.h>
 #include <rt/solids/sphere.h>
@@ -17,6 +18,7 @@
 #include <rt/solids/quad.h>
 
 #include <rt/integrators/raytrace.h>
+#include <rt/integrators/recraytrace.h>
 
 
 #include <rt/coordmappers/coordmapper.h>
@@ -35,9 +37,11 @@
 #include <rt/materials/lambertian.h>
 #include <rt/materials/phong.h>
 #include <rt/materials/combine.h>
+#include <rt/materials/mirror.h>
 
 #include <rt/lights/pointlight.h>
 #include <rt/lights/directional.h>
+#include <rt/lights/arealight.h>
 
 using namespace rt;
 
@@ -184,7 +188,71 @@ void combined_materials(float scale) {
 }
 
 
+void show_mirror_material() {
+    float scale = 0.001f;
+    Image img(400, 400);
+    World world;
+    
+    PerspectiveCamera* cam = new PerspectiveCamera(Point(0.278f, 0.273f, -0.800f), Vector(0, 0, 1), Vector(0, 1, 0), 0.686f, 0.686f);
+    Material* mirror4 = new MirrorMaterial(5.0f, 2.5f);
+    Material* mirror5 = new MirrorMaterial(0.1f, 1.0f);
+
+    BVH* scene = new BVH();
+    world.scene = scene;
+
+    Texture* greentex  = new ConstantTexture(RGBColor(0.f,.7f,0.f));
+    Texture* yellowtex = new ConstantTexture(RGBColor(0.7f,.7f,0.f));
+    Texture* blacktex  = new ConstantTexture(RGBColor::rep(0.0f));
+    Texture* whitetex  = new ConstantTexture(RGBColor::rep(1.0f));
+
+    Material* grey = new LambertianMaterial(blacktex, whitetex);
+    Material* yellowmat = new LambertianMaterial(blacktex, yellowtex);
+    Material* greenmat = new LambertianMaterial(blacktex, greentex);
+
+    //walls
+    scene->add(new Quad(Point(000.f, 000.f, 000.f)*scale, Vector(000.f, 000.f, 560.f)*scale, Vector(550.f, 000.f, 000.f)*scale, nullptr, mirror5)); //floor
+    scene->add(new Quad(Point(550.f, 550.f, 000.f)*scale, Vector(000.f, 000.f, 560.f)*scale, Vector(-550.f, 000.f, 000.f)*scale, nullptr, greenmat)); //ceiling
+    scene->add(new Quad(Point(000.f, 000.f, 560.f)*scale, Vector(000.f, 550.f, 000.f)*scale, Vector(550.f, 000.f, 000.f)*scale, nullptr, grey)); //back wall
+    scene->add(new Quad(Point(000.f, 000.f, 000.f)*scale, Vector(000.f, 550.f, 000.f)*scale, Vector(000.f, 000.f, 560.f)*scale, nullptr, mirror4)); //right wall
+    scene->add(new Quad(Point(550.f, 550.f, 000.f)*scale, Vector(000.f, -550.f, 000.f)*scale, Vector(000.f, 000.f, 560.f)*scale, nullptr, mirror4)); //left wall
+
+    scene->add(new Sphere(Point(150.0f, 100.0f, 240.0f)*scale, 99.0f*scale, nullptr, mirror5));
+    scene->add(new Sphere(Point(450.0f, 50.0f, 50.0f)*scale, 49.0f*scale, nullptr, yellowmat));
+
+    //tall box
+    makeBox(scene, Point(265.f, 000.1f, 296.f)*scale, Vector(049.f, 000.f, 160.f)*scale, Vector(158.f, 000.f, -049.f)*scale, Vector(000.f, 330.f, 000.f)*scale, nullptr, grey);
+
+    EnvironmentMapper* environmentMapper = new EnvironmentMapper(2, 1);
+    ImageTexture* environmentTexture = new ImageTexture("models/thatch_chapel_4k.png", ImageTexture::REPEAT, ImageTexture::BILINEAR);
+    FlatMaterial environmentMaterial(environmentTexture);
+    scene->add(new Environment(environmentMapper, &environmentMaterial));
+
+    //Lights
+    ConstantTexture* lightsrctex = new ConstantTexture(RGBColor::rep(35.0f));
+    Material* lightsource = new LambertianMaterial(lightsrctex, blacktex);
+
+    Quad* light = new Quad(Point(213*scale,549.99f*scale,227*scale), Vector(130*scale,0,0), Vector(0,0,105*scale), nullptr, lightsource);
+    AreaLight als(light);
+    world.light.push_back(&als);
+    scene->add(light);
+
+    //point light
+    world.light.push_back(new PointLight(Point(490*scale,159.99f*scale,279.5f*scale),RGBColor(40000.0f*scale*scale,0,0)));
+    world.light.push_back(new PointLight(Point(40*scale,159.99f*scale,249.5f*scale),RGBColor(5000.0f*scale*scale,30000.0f*scale*scale,5000.0f*scale*scale)));
+
+    RecursiveRayTracingIntegrator integrator(&world);
+    integrator.setRecursionDepth(15);
+    scene->rebuildIndex();
+
+    Renderer engine(cam, &integrator);
+
+    engine.setSamples(100);
+    engine.render(img);
+    img.writeEXR("mirror-material.exr");
+}
+
 void a_extra_credits() {
-    environment_mapper();
-    combined_materials(0.001f);
+    // environment_mapper();
+    // combined_materials(0.001f);
+    show_mirror_material();
 }

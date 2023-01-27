@@ -21,8 +21,7 @@ void Renderer::render(Image& img) {
     float ndcx, ndcy, sscx, sscy;
 
     rt::uint verticalSamples = static_cast<rt::uint>(std::floor(std::sqrt(samples)));
-    // FIXME: The extra samples is probably wrong
-    rt::uint horizontalSamples = verticalSamples + (samples - (verticalSamples * verticalSamples));
+    rt::uint horizontalSamples = verticalSamples + ((samples - (verticalSamples * verticalSamples)) / verticalSamples);
     float sampleHeight = 1.0f / verticalSamples;
     float sampleWidth = 1.0f / horizontalSamples;
 
@@ -47,7 +46,7 @@ void Renderer::render(Image& img) {
                         sscx = (ndcx * 2) - 1;
                         sscy = (ndcy * 2) - 1;
                         Ray ray = cam->getPrimaryRay(sscx, sscy);
-                        color = color + (1.0f/samples) * integrator->getRadiance(ray);
+                        color = color + (1.0f/ (horizontalSamples * verticalSamples)) * integrator->getRadiance(ray);
                     }
                 }
                 img(x, height - y - 1, color);

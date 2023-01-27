@@ -10,8 +10,8 @@ SphericalCoordMapper::SphericalCoordMapper(const Point& origin, const Vector& ze
     uscale = 1.0f / (2 * rt::pi * azimuthRef.length());
     Vector xAxis = azimuthRef.normalize();
     Vector yAxis = zenith.normalize();
-    Vector zAxis = rt::cross(xAxis, yAxis);
-    xAxis = rt::cross(yAxis, zAxis);
+    Vector zAxis = rt::cross(xAxis, yAxis).normalize();
+    // xAxis = rt::cross(yAxis, zAxis).normalize();
     transformation = Matrix::system(xAxis, yAxis, zAxis).invert();
 }
 

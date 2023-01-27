@@ -16,26 +16,27 @@ namespace rt
     }
 
     std::tuple<bool, float, float> solveQuadratic(const float a, const float b, const float c) {
-        if (a == 0 && b == 0) {
+
+        if (rt::approxEquals(a, 0.0f) && rt::approxEquals(b, 0.0f)) {
             return std::make_tuple(false, 0.0f, 0.0f);
-        } else if (a == 0 && b != 0) {
+        } else if (rt::approxEquals(a, 0.0f) && !rt::approxEquals(b, 0.0f)) {
             float res = c/b;
             return std::make_tuple(true, res, res);
-        } else if (b == 0 && c == 0) {
+        } else if (rt::approxEquals(b, 0.0f) && rt::approxEquals(c, 0.0f)) {
             return std::make_tuple(true, 0.0f, 0.0f);
         }
 
-        if (a == 0) {
-            if (b == 0) {
+        if (rt::approxEquals(a, 0.0f)) {
+            if (rt::approxEquals(b, 0.0f)) {
                 return std::make_tuple(false, 0.0f, 0.0f);
             } else {
                 float res = c/b;
                 return std::make_tuple(true, res, res);
             }
         } else {
-            if (b == 0 && c == 0) {
+            if (rt::approxEquals(b, 0.0f) && rt::approxEquals(c, 0.0f)) {
                 return std::make_tuple(true, 0.0f, 0.0f);
-            } else if (b == 0) {
+            } else if (rt::approxEquals(b, 0.0f)) {
                 float res = std::sqrt(c/a);
                 return std::make_tuple(true, res, -res);
             }
