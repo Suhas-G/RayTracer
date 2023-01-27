@@ -106,5 +106,5 @@ void a_distributed() {
     renderCornellbox(0.001f, "distributed-a.exr", cam, sphereMaterial1, floorMaterial1, 30);
     renderCornellbox(0.001f, "distributed-b.exr", cam, sphereMaterial2, floorMaterial2, 30);
     renderCornellbox(0.001f, "distributed-c.exr", dofcam, sphereMaterial2, floorMaterial2, 30);
-    // renderCornellbox(0.001f, "distributed-d.exr", dofcam, sphereMaterial2, floorMaterial2, 1000);
+    renderCornellbox(0.001f, "distributed-d.exr", dofcam, sphereMaterial2, floorMaterial2, 1000);
 }
