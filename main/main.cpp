@@ -1,3 +1,5 @@
+#include <iostream>
+
 void a_julia();
 void a_cameras();
 void a_solids();
@@ -15,5 +17,6 @@ void a_bumpmappers();
 int main(int /*argc*/, char** /*argv*/) {
     a_distributed();
     a_smooth();
+    std::cout << "Rendered all" << std::endl;
     return 0;
 }
