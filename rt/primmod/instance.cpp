@@ -73,6 +73,10 @@ void Instance::setCoordMapper(CoordMapper* cm) {
     this->cm = cm;
 }
 
+void Instance::setNormalMapper(NormalMapper* nm) {
+    this->nm = nm;
+}
+
 Intersection Instance::intersect(const Ray& ray, float tmin, float tmax) const {
     Matrix inv = this->transformation.invert();
     float transformedRayDirLength;

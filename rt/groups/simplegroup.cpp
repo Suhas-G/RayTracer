@@ -46,4 +46,10 @@ void SimpleGroup::setCoordMapper(CoordMapper* cm) {
     }
 }
 
+void SimpleGroup::setNormalMapper(NormalMapper* nm) {
+    for (auto p: primitives) {
+        p->setNormalMapper(nm);
+    }
+}
+
 }

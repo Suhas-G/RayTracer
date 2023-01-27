@@ -3,6 +3,7 @@
 #include <rt/intersection.h>
 #include <rt/solids/solid.h>
 #include <rt/coordmappers/coordmapper.h>
+#include <rt/normalmappers/normalmap.h>
 #include <rt/materials/material.h>
 #include <rt/lights/light.h>
 namespace rt {
@@ -57,6 +58,9 @@ RGBColor RecursiveRayTracingIntegrator::getRadianceRecursive(const Ray& ray, int
     if (!intersection || !textureMaterialPresent(intersection.solid)) return color; // No intersection with world, or something wrong with the solid
 
     Vector normal = intersection.normal();
+    if (intersection.solid->normalMapper != nullptr) {
+        normal = intersection.solid->normalMapper->getNormal(intersection);
+    }
     Point local = intersection.solid->texMapper->getCoords(intersection);
 
     color = color + intersection.solid->material->getEmission(local, normal, -ray.d);

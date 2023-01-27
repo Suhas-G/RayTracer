@@ -22,9 +22,11 @@ public:
     virtual Intersection intersect(const Ray& ray, float tmin = 0, float tmax = FLT_MAX) const;
     virtual void setMaterial(Material* m);
     virtual void setCoordMapper(CoordMapper* cm);
+    virtual void setNormalMapper(NormalMapper* nm);
 private:
     CoordMapper* cm;
     Material* m;
+    NormalMapper* nm;
     Primitive* contentPrimitive;
     Matrix transformation = Matrix::identity();
 };

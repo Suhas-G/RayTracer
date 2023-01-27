@@ -4,10 +4,12 @@
 #include <core/image.h>
 #include <rt/world.h>
 #include <rt/renderer.h>
+#include <rt/multithreadedrenderer.h>
 #include <rt/loaders/obj.h>
 #include <rt/groups/bvh.h>
 #include <rt/groups/simplegroup.h>
 #include <rt/solids/sphere.h>
+#include <rt/solids/infiniteplane.h>
 #include <rt/cameras/perspective.h>
 #include <rt/integrators/casting.h>
 #include <rt/integrators/raytrace.h>
@@ -15,14 +17,16 @@
 #include <rt/materials/dummy.h>
 #include <rt/materials/flatmaterial.h>
 #include <rt/textures/constant.h>
+#include <rt/textures/checkerboard.h>
 #include <rt/materials/lambertian.h>
 #include <rt/materials/phong.h>
 #include <rt/materials/combine.h>
+#include <rt/normalmappers/randomrough.h>
 
 using namespace rt;
 
 
-rt::MatLib* buildMaterialLibrary() {
+rt::MatLib* buildMaterialLibraryForCornellBox() {
     ConstantTexture* blackTex = new ConstantTexture(RGBColor::rep(0.0f));
 
     LambertianMaterial *upperSphere = new LambertianMaterial(blackTex, new ConstantTexture(RGBColor(0.8, 0.105699, 0.108560)));
@@ -39,12 +43,12 @@ rt::MatLib* buildMaterialLibrary() {
     return matlib;
 }   
 
-void a_trial() {
+void loadCornellBox() {
     Image img(600, 600);
 
     BVH* scene = new BVH();
 
-    rt::MatLib *lib = buildMaterialLibrary();
+    rt::MatLib *lib = buildMaterialLibraryForCornellBox();
     // loadOBJMat(lib, "models/", "cornell-box.mtl");
     loadOBJ(scene, "models/", "cornell-box.obj", lib);
     // DummyMaterial* mat = new DummyMaterial();
@@ -56,7 +60,7 @@ void a_trial() {
 
     std::cout << "Bounds : "<< scene->getBounds() << std::endl;
 
-    PointLight *light = new PointLight(Point(-42.86680221557617, 12.695966720581055, 0.0), RGBColor::rep(1.0f));
+    PointLight *light = new PointLight(Point(-42.86680221557617, 12.695966720581055, 0.0), RGBColor::rep(10000.0f));
     world.light.push_back(light);
 
     // Matrix rotation = Matrix(
@@ -73,9 +77,42 @@ void a_trial() {
     
 
     RayTracingIntegrator integrator(&world);
-    Renderer engine(&cam, &integrator);
-    // engine.setSamples(100);
+    MultiThreadedRenderer engine(&cam, &integrator);
+    engine.setSamples(16);
     engine.render(img);
     img.writeEXR("trial-cornell-box.exr");
+}
 
+void testRoughNormalMap() {
+
+    SimpleGroup* scene = new SimpleGroup();
+    Image img(800, 800);
+    World world;
+    PerspectiveCamera cam(Point(0.1f, -1.5f, 0.225f), Vector(0.f, 1.f, -0.5f), Vector(0.f, 0.f, 1.f), 1.0f, 1.0f);
+    RayTracingIntegrator integrator(&world);
+    
+
+    CheckerboardTexture* checkerboardTex = new CheckerboardTexture(RGBColor(1.0f,0.9f,0.7f), RGBColor(0.2f,0.2f,0.0f));
+    // FlatMaterial* checkerboard = new FlatMaterial(checkerboardTex);
+    ConstantTexture* blacktex = new ConstantTexture(RGBColor::rep(0.0f));
+    LambertianMaterial* checkerboard = new LambertianMaterial(blacktex, checkerboardTex);
+
+    RandomRoughNormalMapper* randomNm = new RandomRoughNormalMapper(0.5f);
+    InfinitePlane* plane = new InfinitePlane(Point(0.0f,0.0f,-0.018f), Vector(0.01f, 0.0f, 1.0f), nullptr, checkerboard);
+    plane->setNormalMapper(randomNm);
+    scene->add(plane);
+
+    PointLight *light = new PointLight(Point(-42.86680221557617, 12.695966720581055, 100.0), RGBColor::rep(10000.0f));
+    world.light.push_back(light);
+
+    world.scene = scene;
+
+    Renderer engine(&cam, &integrator);
+    engine.render(img);
+    img.writeEXR("rough-normalmap.exr");
+}
+
+void a_trial() {
+    // loadCornellBox();
+    testRoughNormalMap();
 }

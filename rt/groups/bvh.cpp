@@ -286,6 +286,13 @@ namespace rt {
         }
     }
 
+    void BVH::setNormalMapper(NormalMapper* nm) {
+        /* TODO */
+        for (auto p : primitives) {
+            p->setNormalMapper(nm);
+        }
+    }
+
     void BVH::serialize(BVH::Output& output) {
         // To implement this function:
         // - Call output.setNodeCount() with the number of nodes in the BVH

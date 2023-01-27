@@ -11,6 +11,7 @@ namespace rt {
 class Ray;
 class Material;
 class CoordMapper;
+class NormalMapper;
 
 /*
 Primitive represents any object in the virtual scene that can be intersected by a ray.
@@ -22,6 +23,7 @@ public:
     virtual Intersection intersect(const Ray& ray, float tmin = 0, float tmax = FLT_MAX) const = 0;
     virtual void setMaterial(Material* m) = 0;
     virtual void setCoordMapper(CoordMapper* cm) = 0;
+    virtual void setNormalMapper(NormalMapper* nm) = 0;
 };
 /* Inherited by:
 

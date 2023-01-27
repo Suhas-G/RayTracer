@@ -10,6 +10,10 @@ set(MY_ADDITIONAL_SOURCES
     rt/coordmappers/environment.cpp
     main/a_extra_credits.cpp
     main/a_trial.cpp
+    rt/normalmappers/normalmap.h
+    rt/normalmappers/normalmap.cpp
+    rt/normalmappers/randomrough.h
+    rt/normalmappers/randomrough.cpp
 )
 
 set(ASSIGNMENT_SOURCES

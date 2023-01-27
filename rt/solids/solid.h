@@ -9,6 +9,7 @@ namespace rt {
 
 class Material;
 class CoordMapper;
+class NormalMapper;
 
 /*
 A solid is a physical primitive that has material and can be textured
@@ -22,11 +23,14 @@ public:
 
     Material* material;
     CoordMapper* texMapper;
-    explicit Solid(CoordMapper* texMapper = nullptr, Material* material = nullptr);
+    NormalMapper* normalMapper;
+    explicit Solid(CoordMapper* texMapper = nullptr, Material* material = nullptr, 
+        NormalMapper* normalMapper = nullptr);
     virtual Sample sample() const = 0;
     virtual float getArea() const = 0;
     virtual void setMaterial(Material* m) { material = m; }
     virtual void setCoordMapper(CoordMapper* cm) { texMapper = cm; }
+    virtual void setNormalMapper(NormalMapper* nm) { normalMapper = nm; }
 };
 
 }
