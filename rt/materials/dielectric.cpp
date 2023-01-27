@@ -58,17 +58,17 @@ namespace rt {
         float rParallel = 0;
         float rPerp = 0;
 
-        std::tie(rParallel, rPerp) = dielectricFresnel(_eta_i, _eta_t, cos, cos_t);
+        std::tie(rParallel, rPerp) = dielectricFresnel(_eta_i, _eta_t, std::abs(cos), std::abs(cos_t));
 
         float fr = 0.5f * (rt::sqr(rParallel) + rt::sqr(rPerp));
 
         if (sin > (_eta_t / _eta_i)) {
-            return SampleReflectance(RI, RGBColor::rep(1.0f));
-        } else if (rt::random() <= 0.2) {
             return SampleReflectance(RI, RGBColor::rep(fr));
+        } else if (rt::random() <= 0.2) {
+            return SampleReflectance(RI, RGBColor::rep(1.0f));
         }else {
             Vector refracted = ((_eta * cos) - std::sqrt(1 - (sin * sin) * (_eta * _eta))) * _normal - _eta * outDir;
-            return SampleReflectance(refracted.normalize(), RGBColor::rep((1 - fr) / rt::sqr(_eta)));
+            return SampleReflectance(refracted.normalize(), RGBColor::rep((1 - fr) * rt::sqr(_eta)));
         }
 
     }
