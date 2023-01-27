@@ -68,7 +68,7 @@ namespace rt {
             return SampleReflectance(RI, RGBColor::rep(1.0f));
         }else {
             Vector refracted = ((_eta * cos) - std::sqrt(1 - (sin * sin) * (_eta * _eta))) * _normal - _eta * outDir;
-            return SampleReflectance(refracted.normalize(), RGBColor::rep(1.0f));
+            return SampleReflectance(refracted.normalize(), RGBColor::rep(rt::sqr(1.0f / _eta)));
         }
 
     }
