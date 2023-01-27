@@ -63,12 +63,12 @@ namespace rt {
         float fr = 0.5f * (rt::sqr(rParallel) + rt::sqr(rPerp));
 
         if (sin > (_eta_t / _eta_i)) {
-            return SampleReflectance(RI, RGBColor::rep(fr));
-        } else if (rt::random() <= 0.2) {
+            return SampleReflectance(RI, RGBColor::rep(1.0f));
+        } else if (rt::random() <= fr) {
             return SampleReflectance(RI, RGBColor::rep(1.0f));
         }else {
             Vector refracted = ((_eta * cos) - std::sqrt(1 - (sin * sin) * (_eta * _eta))) * _normal - _eta * outDir;
-            return SampleReflectance(refracted.normalize(), RGBColor::rep((1 - fr) * rt::sqr(_eta)));
+            return SampleReflectance(refracted.normalize(), RGBColor::rep(1.0f));
         }
 
     }
