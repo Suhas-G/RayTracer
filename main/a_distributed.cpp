@@ -8,6 +8,7 @@
 #include <rt/cameras/dofperspective.h>
 #include <rt/textures/constant.h>
 #include <rt/renderer.h>
+#include <rt/multithreadedrenderer.h>
 #include <rt/integrators/recraytrace.h>
 #include <rt/solids/quad.h>
 #include <rt/solids/sphere.h>
@@ -82,7 +83,7 @@ void renderCornellbox(float scale, const char* filename, Camera* cam, Material* 
     RecursiveRayTracingIntegrator integrator(&world);
     scene->rebuildIndex();
 
-    Renderer engine(cam, &integrator);
+    MultiThreadedRenderer engine(cam, &integrator);
     if (numSamples>1)
         engine.setSamples(numSamples);
     engine.render(img);

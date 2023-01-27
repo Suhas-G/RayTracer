@@ -4,6 +4,8 @@ set(MY_ADDITIONAL_SOURCES
     # Please add your source files here
     rt/materials/mirror.h
     rt/materials/mirror.cpp
+    rt/multithreadedrenderer.h
+    rt/multithreadedrenderer.cpp
 )
 
 set(ASSIGNMENT_SOURCES

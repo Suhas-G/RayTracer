@@ -1,3 +1,5 @@
+#include <iostream>
+
 void a_julia();
 void a_cameras();
 void a_solids();

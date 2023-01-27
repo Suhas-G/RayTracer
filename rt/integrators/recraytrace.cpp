@@ -27,7 +27,7 @@ RGBColor computeFromLightSources(const World* world, const Ray& ray, const Inter
             continue;
         }
 
-        Ray shadowRay = Ray(hitPoint + (2 * rt::epsilon * normal), lightHit.direction);
+        Ray shadowRay = Ray(hitPoint + (2 * rt::epsilon * lightHit.direction), lightHit.direction);
         // TODO: Confirm that the shadow ray and the primary ray leave the surface on the same side. HOW?
         Intersection shadowIntersection = world->scene->intersect(shadowRay, 0.0f, lightHit.distance);
 
