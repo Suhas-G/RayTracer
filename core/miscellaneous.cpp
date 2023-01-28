@@ -2,6 +2,7 @@
 #include <core/miscellaneous.h>
 #include <core/assert.h>
 #include <core/scalar.h>
+#include <core/vector.h>
 
 
 namespace rt
@@ -63,5 +64,26 @@ namespace rt
         float phi = std::atan2(p.z, p.x);
         phi = phi < 0 ? rt::pi + phi : phi;
         return Point(phi / (2 * rt::pi), theta / rt::pi, dist);
+    }
+
+
+    std::tuple<Vector, Vector> cameraForwardAndUp(const Point& from, const Point& to) {
+        Vector forward = (to - from).normalize();
+        Vector up = Vector::rep(0.0f);
+        if (forward.x <= forward.y && forward.x <= forward.z) {
+            up.y = -forward.z;
+            up.z = forward.y;
+        } else if (forward.y <= forward.x && forward.y <= forward.z) {
+            up.x = -forward.z;
+            up.z = forward.x;
+        } else {
+            up.x = -forward.y;
+            up.y = forward.x;
+        }
+        up = up.normalize();
+        Vector right = rt::cross(up, forward).normalize();
+        up = rt::cross(right, forward);
+
+        return std::make_tuple(forward, up);
     }
 }
