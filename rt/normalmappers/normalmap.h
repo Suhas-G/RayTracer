@@ -8,8 +8,8 @@ namespace rt {
 
 class NormalMapper {
 public:
-    Vector getNormal(const Intersection& hit);
-    virtual Vector computePerturbation(const Intersection& hit) const = 0;
+    Vector getNormal(const Intersection& hit, const Point& coords);
+    virtual Vector computePerturbation(const Intersection& hit, const Point& coords) const = 0;
     virtual ~NormalMapper() {}
 };
 

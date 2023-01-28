@@ -8,7 +8,7 @@ namespace rt
 
     }
 
-    Vector RandomRoughNormalMapper::computePerturbation(const Intersection& hit) const {
+    Vector RandomRoughNormalMapper::computePerturbation(const Intersection& hit, const Point& coords) const {
         return Vector(rt::random(-amplitude, amplitude), rt::random(-amplitude, amplitude), rt::random(-amplitude, amplitude));
     }
 }

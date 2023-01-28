@@ -57,12 +57,12 @@ RGBColor RecursiveRayTracingIntegrator::getRadianceRecursive(const Ray& ray, int
 
     if (!intersection || !textureMaterialPresent(intersection.solid)) return color; // No intersection with world, or something wrong with the solid
 
+    
+    Point local = intersection.solid->texMapper->getCoords(intersection);
     Vector normal = intersection.normal();
     if (intersection.solid->normalMapper != nullptr) {
-        normal = intersection.solid->normalMapper->getNormal(intersection);
+        normal = intersection.solid->normalMapper->getNormal(intersection, local);
     }
-    Point local = intersection.solid->texMapper->getCoords(intersection);
-
     color = color + intersection.solid->material->getEmission(local, normal, -ray.d);
 
     if (intersection.distance == FLT_MAX) return color; // Environment object, which has only emission
@@ -81,6 +81,13 @@ RGBColor RecursiveRayTracingIntegrator::getRadianceRecursive(const Ray& ray, int
     }
         break;
     case rt::Material::SAMPLING_SECONDARY:
+    {
+        color = color + computeFromLightSources(world, ray, intersection, normal, local);
+        rt::Material::SampleReflectance sampleReflectance = intersection.solid->material->getSampleReflectance(local, normal, -ray.d);
+        Point hitPoint = intersection.hitPoint();
+        Ray secondaryRay = Ray(hitPoint + (2 * rt::epsilon * sampleReflectance.direction), sampleReflectance.direction);
+        color = color + (sampleReflectance.reflectance * getRadianceRecursive(secondaryRay, depth + 1));
+    }
         break;
     default:
         break;

@@ -2,8 +2,8 @@
 
 
 namespace rt {
-    Vector NormalMapper::getNormal(const Intersection& hit) {
-        Vector perturbation = this->computePerturbation(hit);
+    Vector NormalMapper::getNormal(const Intersection& hit, const Point& coords) {
+        Vector perturbation = this->computePerturbation(hit, coords);
 
         Vector r = hit.normal();
         float rx = std::abs(r.x), ry = std::abs(r.y), rz = std::abs(r.z);
@@ -21,7 +21,7 @@ namespace rt {
         s = s.normalize();
         Vector t = rt::cross(r, s);
 
-        Vector perturbedNormal = r + (r * perturbation.x) + (s * perturbation.y) + (t * perturbation.z);
+        Vector perturbedNormal = r + (s * perturbation.x) + (t * perturbation.y) + (r * perturbation.z);
         return perturbedNormal.normalize();
     }
 }

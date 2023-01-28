@@ -5,6 +5,7 @@
 #include <rt/solids/solid.h>
 #include <rt/materials/material.h>
 #include <rt/coordmappers/coordmapper.h>
+#include <rt/normalmappers/normalmap.h>
 
 namespace rt {
 
@@ -13,10 +14,14 @@ RGBColor RayTracingIntegrator::getRadiance(const Ray& ray) const {
     RGBColor color = RGBColor::rep(0.0f);
     Intersection intersection = world->scene->intersect(ray);
     if (intersection) {
-        Vector normal = intersection.normal();
+        
         Point local;
         rt_assert(intersection.solid->texMapper != nullptr);
         local = intersection.solid->texMapper->getCoords(intersection);
+        Vector normal = intersection.normal();
+        if (intersection.solid->normalMapper != nullptr) {
+            normal = intersection.solid->normalMapper->getNormal(intersection, local);
+        }
         RGBColor emittance = intersection.solid->material->getEmission(local, normal, -ray.d);
         Point hitPoint = intersection.hitPoint();
         if (intersection.distance < FLT_MAX) {

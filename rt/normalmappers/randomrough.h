@@ -8,7 +8,7 @@ namespace rt {
 class RandomRoughNormalMapper: public NormalMapper {
 public:
     RandomRoughNormalMapper(float amplitude);
-    Vector computePerturbation(const Intersection& hit) const override;
+    Vector computePerturbation(const Intersection& hit, const Point& coords) const override;
 private:
     float amplitude = 1.0f;
 };
