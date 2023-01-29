@@ -38,16 +38,29 @@ RGBColor CombineMaterial::getEmission(const Point& texPoint, const Vector& norma
 
 Material::SampleReflectance CombineMaterial::getSampleReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir) const {
     /* TODO */
-    std::vector<SampleReflectance> reflectances;
+    std::vector<std::tuple<SampleReflectance, float>> reflectances;
+    float totalWeight = 0.0f;
     for (auto &item: materials) {
         Material* m = std::get<0>(item);
+        float weight = std::get<1>(item);
+        totalWeight += weight;
         if (m->useSampling() == rt::Material::SAMPLING_ALL) {
             SampleReflectance reflectance = m->getSampleReflectance(texPoint, normal, outDir);
-            reflectances.push_back(reflectance);
+            reflectances.push_back(std::make_tuple(reflectance, weight));
         }
     }
-    int index = std::max(static_cast<int>(std::floor(rt::random() * reflectances.size())), static_cast<int>(reflectances.size() - 1));
-    return reflectances[index];
+    float randomSample = rt::random() * totalWeight;
+    for (auto const& item: reflectances) {
+        float sampleWeight = std::get<1>(item);
+        if (sampleWeight != 0) {
+            sampleWeight = sampleWeight / totalWeight;
+            if (sampleWeight > randomSample) {
+                return std::get<0>(item);
+            }
+        }
+    }
+    // int index = std::max(static_cast<int>(std::floor(rt::random() * reflectances.size())), static_cast<int>(reflectances.size() - 1));
+    return std::get<0>(reflectances[reflectances.size() - 1]);
 }
 
 Material::Sampling CombineMaterial::useSampling() const {

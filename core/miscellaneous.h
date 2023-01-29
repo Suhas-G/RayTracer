@@ -20,6 +20,7 @@ namespace rt
     T clamp(T val, T min, T max);
 
     std::tuple<Vector, Vector> cameraForwardAndUp(const Point& from, const Point& to);
+
 } 
 
 

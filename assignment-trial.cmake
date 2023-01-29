@@ -14,6 +14,8 @@ set(MY_ADDITIONAL_SOURCES
     rt/normalmappers/normalmap.cpp
     rt/normalmappers/randomrough.h
     rt/normalmappers/randomrough.cpp
+    rt/normalmappers/imagenormal.h
+    rt/normalmappers/imagenormal.cpp
 )
 
 set(ASSIGNMENT_SOURCES
@@ -55,5 +57,10 @@ file(COPY
     models/thatch_chapel_4k.png
     models/cornell-box.obj
     models/cornell-box.mtl
+    models/Water_001_COLOR.png
+    models/Water_001_NORM.png
+    models/Water_001_SPEC.png
+    models/Sand_002_COLOR.png
+    models/Sand_002_NRM.png
     DESTINATION ${CMAKE_BINARY_DIR}/models
 )
