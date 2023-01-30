@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include <unordered_map>
 #include <vector>
 
 namespace rt {
@@ -11,8 +12,9 @@ class Group;
 class Material;
 
 typedef std::map<std::string, Material*> MatLib;
+typedef std::map<std::string, Group*> ObjLib;
 
-void loadOBJ(Group* dest, const std::string& path, const std::string& filename, MatLib* inmats=nullptr);
+ObjLib* loadOBJ(Group* dest, const std::string& path, const std::string& filename, MatLib* inmats=nullptr);
 void loadOBJMat(MatLib* dest, const std::string& path, const std::string& filename);
 
 }

@@ -60,6 +60,9 @@ Material::SampleReflectance CombineMaterial::getSampleReflectance(const Point& t
         }
     }
     // int index = std::max(static_cast<int>(std::floor(rt::random() * reflectances.size())), static_cast<int>(reflectances.size() - 1));
+    if (reflectances.empty()) {
+        return SampleReflectance(Vector::rep(0.0f), RGBColor::rep(0.0f));
+    }
     return std::get<0>(reflectances[reflectances.size() - 1]);
 }
 

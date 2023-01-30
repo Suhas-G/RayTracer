@@ -316,6 +316,10 @@ namespace rt {
         delete[] bvhTree;
     }
 
+    int BVH::getSize() {
+        return primitives.size();
+    }
+
     void BVHBuildNode::initLeafNode(int _firstPrimOffset, int _nPrimitives) {
         children[0] = children[1] = nullptr;
         firstPrimOffset = _firstPrimOffset;

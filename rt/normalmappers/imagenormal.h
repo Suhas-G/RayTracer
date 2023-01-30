@@ -10,10 +10,11 @@ namespace rt
 
 class ImageNormalMapper: public NormalMapper {
 public:
-    ImageNormalMapper(ImageTexture* imgTexture);
+    ImageNormalMapper(ImageTexture* imgTexture, float amplitude = 1.0f);
     Vector computePerturbation(const Intersection& hit, const Point& coords) const override;
 private:
     ImageTexture* imgTexture;
+    float amplitude = 1.0f;
 };
 }
 

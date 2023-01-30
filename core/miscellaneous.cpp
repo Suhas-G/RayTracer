@@ -69,17 +69,17 @@ namespace rt
 
     std::tuple<Vector, Vector> cameraForwardAndUp(const Point& from, const Point& to) {
         Vector forward = (to - from).normalize();
-        Vector up = Vector::rep(0.0f);
-        if (forward.x <= forward.y && forward.x <= forward.z) {
-            up.y = -forward.z;
-            up.z = forward.y;
-        } else if (forward.y <= forward.x && forward.y <= forward.z) {
-            up.x = -forward.z;
-            up.z = forward.x;
-        } else {
-            up.x = -forward.y;
-            up.y = forward.x;
-        }
+        Vector up = Vector(0.0f, -1.0f, 0.0f);
+        // if (forward.x <= forward.y && forward.x <= forward.z) {
+        //     up.y = -forward.z;
+        //     up.z = forward.y;
+        // } else if (forward.y <= forward.x && forward.y <= forward.z) {
+        //     up.x = -forward.z;
+        //     up.z = forward.x;
+        // } else {
+        //     up.x = -forward.y;
+        //     up.y = forward.x;
+        // }
         up = up.normalize();
         Vector right = rt::cross(up, forward).normalize();
         up = rt::cross(right, forward);

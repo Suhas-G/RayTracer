@@ -75,18 +75,22 @@ RGBColor RecursiveRayTracingIntegrator::getRadianceRecursive(const Ray& ray, int
     case rt::Material::SAMPLING_ALL: 
     {
         rt::Material::SampleReflectance sampleReflectance = intersection.solid->material->getSampleReflectance(local, normal, -ray.d);
-        Point hitPoint = intersection.hitPoint();
-        Ray secondaryRay = Ray(hitPoint + (2 * rt::epsilon * sampleReflectance.direction), sampleReflectance.direction);
-        color = color + (sampleReflectance.reflectance * getRadianceRecursive(secondaryRay, depth + 1));
+        if (sampleReflectance.direction != Vector::rep(0.0f)) {
+            Point hitPoint = intersection.hitPoint();
+            Ray secondaryRay = Ray(hitPoint + (2 * rt::epsilon * sampleReflectance.direction), sampleReflectance.direction);
+            color = color + (sampleReflectance.reflectance * getRadianceRecursive(secondaryRay, depth + 1));
+        }
     }
         break;
     case rt::Material::SAMPLING_SECONDARY:
     {
         color = color + computeFromLightSources(world, ray, intersection, normal, local);
         rt::Material::SampleReflectance sampleReflectance = intersection.solid->material->getSampleReflectance(local, normal, -ray.d);
-        Point hitPoint = intersection.hitPoint();
-        Ray secondaryRay = Ray(hitPoint + (2 * rt::epsilon * sampleReflectance.direction), sampleReflectance.direction);
-        color = color + (sampleReflectance.reflectance * getRadianceRecursive(secondaryRay, depth + 1));
+        if (sampleReflectance.direction != Vector::rep(0.0f)) {
+            Point hitPoint = intersection.hitPoint();
+            Ray secondaryRay = Ray(hitPoint + (2 * rt::epsilon * sampleReflectance.direction), sampleReflectance.direction);
+            color = color + (sampleReflectance.reflectance * getRadianceRecursive(secondaryRay, depth + 1));
+        }
     }
         break;
     default:

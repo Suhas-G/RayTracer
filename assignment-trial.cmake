@@ -16,6 +16,9 @@ set(MY_ADDITIONAL_SOURCES
     rt/normalmappers/randomrough.cpp
     rt/normalmappers/imagenormal.h
     rt/normalmappers/imagenormal.cpp
+    rt/materials/transmission.h 
+    rt/materials/transmission.cpp
+    main/a_competition.cpp
 )
 
 set(ASSIGNMENT_SOURCES

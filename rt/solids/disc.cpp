@@ -1,5 +1,6 @@
 #include <rt/solids/disc.h>
 #include <rt/solids/infiniteplane.h>
+#include <core/random.h>
 
 namespace rt {
 
@@ -24,7 +25,9 @@ Intersection Disc::intersect(const Ray& ray, float tmin, float tmax) const {
 }
 
 Solid::Sample Disc::sample() const {
-    NOT_IMPLEMENTED;
+    float rho = std::sqrt(rt::random(radius));
+    float theta = rt::random(0, 2 * rt::pi);
+    return Sample{center + Point(rho * std::cos(theta), rho * std::sin(theta), 0.0f), normal};
 }
 
 float Disc::getArea() const {

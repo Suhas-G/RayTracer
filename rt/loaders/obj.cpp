@@ -6,6 +6,7 @@
 #include <core/color.h>
 #include <rt/loaders/obj.h>
 #include <rt/groups/group.h>
+#include <rt/groups/bvh.h>
 #include <rt/solids/triangle.h>
 #include <string>
 #include <fstream>
@@ -220,7 +221,10 @@ float FileLine::fetchFloat(float defaultv) {
 std::string FileLine::fetchString() {
     skipWhitespace();
     size_t start = pos;
-    while (str.c_str()[pos]!=' ' && str.c_str()[pos]!='\t' && str.c_str()[pos]!='\n')   ++pos;
+
+    while (pos < str.size() && str.c_str()[pos]!=' ' && str.c_str()[pos]!='\t' && str.c_str()[pos]!='\n') {
+           ++pos;
+    }
     return str.substr(start, pos-start);
 }
 #endif
@@ -257,7 +261,8 @@ Int3 FileLine::fetchVertex() {
 }
 
 
-void loadOBJ(Group* dest, const std::string& path, const std::string& filename, MatLib* inmats) {
+ObjLib* loadOBJ(Group* dest, const std::string& path, const std::string& filename, MatLib* inmats) {
+    ObjLib* objlib = new ObjLib();
     MatLib* matlib;
     if (inmats)
         matlib = inmats;
@@ -275,6 +280,8 @@ void loadOBJ(Group* dest, const std::string& path, const std::string& filename, 
 
     FileLine fileline;
     fileline.open(path + filename);
+
+    BVH* objGroup = nullptr;
 
     size_t numfaces = 0;
     while (!fileline.eof()) {
@@ -368,7 +375,9 @@ void loadOBJ(Group* dest, const std::string& path, const std::string& filename, 
                         t = nullptr;
 #endif
                     }
-                    dest->add(t);
+                    rt_assert(objGroup != nullptr);
+                    objGroup->add(t);
+                    // dest->add(t);
 
                     v[1] = v[2];
                     READ_VERTEX(2, false)
@@ -394,6 +403,22 @@ void loadOBJ(Group* dest, const std::string& path, const std::string& filename, 
                 break;
             }
             case Obj_None: break; //empty line
+            case Obj_Object:
+            {
+                if (objGroup != nullptr && objGroup->getSize() != 0) {
+                    objGroup->rebuildIndex();
+                    dest->add(objGroup);
+                }
+                objGroup = new BVH();
+                std::string objname = fileline.fetchString();
+                std::cout << "Loading: " << objname << std::endl;
+                rt_assert(objlib != nullptr);
+                objlib->insert({objname, objGroup});
+            }
+                break;
+            case Obj_Smooth:
+                fileline.fetchString();
+                break;
             case Obj_Invalid: 
                 rt_release_assert(false) << "Error in file " << fileline.filename << ":" << fileline.lineIdx << "." << fileline.pos << " : Vertex index cannot be 0";
             default:
@@ -405,6 +430,12 @@ void loadOBJ(Group* dest, const std::string& path, const std::string& filename, 
     fileline.close();
     if (!inmats)
         delete matlib;
+    if (objGroup != nullptr && objGroup->getSize() != 0) {
+        objGroup->rebuildIndex();
+        dest->add(objGroup);
+    }
+    // dest->rebuildIndex();
+    return objlib;
 }
 
 }

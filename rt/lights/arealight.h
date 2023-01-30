@@ -9,11 +9,12 @@ namespace rt {
 class AreaLight : public Light {
 public:
     AreaLight() {}
-    AreaLight(Solid* source);
+    AreaLight(Solid* source, float scale = 1.0f);
     virtual LightHit getLightHit(const Point& p) const;
     virtual RGBColor getIntensity(const LightHit& irr) const;
 private:
     Solid* source;
+    float scale = 1.0f;
 };
 
 }

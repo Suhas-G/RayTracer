@@ -55,6 +55,7 @@ public:
     virtual void setMaterial(Material* m);
     virtual void setCoordMapper(CoordMapper* cm);
     virtual void setNormalMapper(NormalMapper* nm);
+    int getSize();
 
     // Do not use this structure as your node layout:
     // It is inefficient and has a large memory footprint.

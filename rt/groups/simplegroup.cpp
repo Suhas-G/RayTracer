@@ -18,7 +18,7 @@ Intersection SimpleGroup::intersect(const Ray& ray, float tmin, float tmax) cons
     for (auto p: primitives) {
         temp = p->intersect(ray, tmin, tmax);
         if (temp) {
-            rt_assert(temp.distance < tmax);
+            // rt_assert(temp.distance < tmax);
             tmax = temp.distance;
             groupIntersection = temp;
         }

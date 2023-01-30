@@ -18,7 +18,7 @@ class BBox {
 public:
     Point min, max;
 
-    BBox() {}
+    BBox(): min(Point::rep(0.0f)), max(Point::rep(0.0f)) {}
     BBox(const Point& min, const Point& max)
     {
         this->min = rt::min(min, max);
