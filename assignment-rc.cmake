@@ -60,17 +60,29 @@ file(COPY
     models/thatch_chapel_4k.png
     models/cornell-box.obj
     models/cornell-box.mtl
-    models/textures/moon.png
-    models/textures/snow_03_diff_1k.png
-    models/textures/brick_wall_001_diffuse_1k.png
-    models/textures/dark_wood_diff_1k.png
-    models/textures/fine_grained_wood_col_1k.png
-    models/normals/snow_03_nor_dx_1k.png
-    models/normals/Water_001_NORM.png
-    models/environment/stars.png
     models/composite_scene.obj
     models/composite_scene.mtl
     models/temple.obj
     models/temple.mtl
     DESTINATION ${CMAKE_BINARY_DIR}/models
+)
+
+file(COPY
+    models/textures/moon.png
+    models/textures/snow_03_diff_1k.png
+    models/textures/brick_wall_001_diffuse_1k.png
+    models/textures/dark_wood_diff_1k.png
+    models/textures/fine_grained_wood_col_1k.png
+    DESTINATION ${CMAKE_BINARY_DIR}/models/textures
+)
+
+file(COPY
+    models/normals/snow_03_nor_dx_1k.png
+    models/normals/Water_001_NORM.png
+    DESTINATION ${CMAKE_BINARY_DIR}/models/normals
+)
+
+file(COPY 
+    models/environment/stars.png
+    DESTINATION ${CMAKE_BINARY_DIR}/models/environment
 )

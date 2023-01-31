@@ -1,6 +1,5 @@
 # Blender 3.4.1
 # www.blender.org
-mtllib composite_scene.mtl
 o Bridge_Base
 v -23.147846 -2.270783 5.017076
 v -46.161949 -2.268743 -43.482819
