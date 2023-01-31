@@ -11,7 +11,7 @@ class Integrator;
 
 class MultiThreadedRenderer {
 public:
-    MultiThreadedRenderer(Camera* cam, Integrator* integrator);
+    MultiThreadedRenderer(Camera* cam, Integrator* integrator, int maxThreads = 0);
     void setSamples(uint samples) { this->samples = samples; }
     void render(Image& img);
 
@@ -19,6 +19,7 @@ private:
     Camera* cam;
     Integrator* integrator;
     uint samples;
+    int maxThreads = 0;
 
     void renderWithMultipleSamples(Image& img);
 };

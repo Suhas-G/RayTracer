@@ -17,7 +17,6 @@ void a_trial();
 void a_competition();
 
 int main(int /*argc*/, char** /*argv*/) {
-    // a_trial();
     a_competition();
     return 0;
 }

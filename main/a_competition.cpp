@@ -91,6 +91,32 @@ inline RGBColor streetlampblue() {
     return RGBColor(0.1, 0.7, 0.7);
 }
 
+inline RGBColor pink() {
+    return RGBColor(1, 0.301, 0.776);
+}
+
+inline RGBColor purple() {
+    return RGBColor(0.886, 0.745, 0.933);
+}
+
+inline RGBColor lampblue() {
+    return RGBColor(0.568, 0.768, 0.968);
+}
+
+inline RGBColor green() {
+    return RGBColor(0.321, 1, 0.419);
+}
+
+inline RGBColor lampgreen() {
+    return RGBColor(0.819, 1, 0.847);
+}
+
+inline RGBColor white() {
+    return RGBColor::rep(1.0f);
+}
+
+
+
 static std::vector<rt::Quad*> makeBox(Group* scene, const Point& aaa, const Vector& forward, const Vector& left, const Vector& up, CoordMapper* texMapper, Material* material) {
     std::vector<rt::Quad*> quads;
     Quad* q1 = new Quad(aaa, left, forward, texMapper, material);
@@ -135,13 +161,15 @@ static void addMoon(World* world, Group* scene, Point center, Point cameraPositi
     world->light.push_back(new SpotLight(Point(-80.431, 20.0, 225.316), Vector(0, 0, -1), 0.8 * rt::pi, 0.0001f, RGBColor::rep(4000.0f)));
 }
 
-static void addLightCube(World* world, Group* scene, Point center, float size, float intensity = 20.0f, bool translucent = false) {
-    Material* cubeMat = new LambertianMaterial(colorTexture(yellowishOrange()),
-                                                         colorTexture(orange()));
+static void addLightCube(World* world, Group* scene, Point center, 
+    float size, float intensity = 20.0f, bool translucent = false,
+    RGBColor lightColor = yellowishOrange(), RGBColor boxColor = orange()) {
+    Material* cubeMat = new LambertianMaterial(colorTexture(lightColor),
+                                                         colorTexture(boxColor));
     if (translucent) {
         CombineMaterial* cb = new CombineMaterial();
-        cb->add(cubeMat, 0.5);
-        cb->add(new TransmissionMaterial(0.5, orange()), 0.5f);
+        cb->add(cubeMat, 0.2);
+        cb->add(new TransmissionMaterial(0.1, boxColor), 0.8f);
         cubeMat = cb;
     } 
 
@@ -152,6 +180,23 @@ static void addLightCube(World* world, Group* scene, Point center, float size, f
     }
     // PointLight* light = new PointLight(center + Point(0, 5, 0), 50*RGBColor(0.910, 0.708, 0.237));
     // world->light.push_back(light);
+}
+
+static void addSpotLight(World* world, Group* scene, Point center, float radius,
+    float intensity, RGBColor lightColor = yellowishOrange(), RGBColor sphereColor = orange()) {
+    
+    Material* sphereMat1 = new DielectricMaterial(1.5f);
+    Material* sphereMat2 = new LambertianMaterial(colorTexture(lightColor),
+                                                         colorTexture(sphereColor));
+    Sphere* sphere1 = new Sphere(static_cast<Point>(center + Point(0, 2.4f * radius, 0)), radius / 1.75f, nullptr, sphereMat1);
+    Sphere* sphere2 = new Sphere(center, radius, nullptr, sphereMat2);
+
+    PointLight* light = new PointLight(static_cast<Point>(center - Point(0, 1.2f * radius, 0)),
+                                        intensity * lightColor);
+    scene->add(sphere1);
+    scene->add(sphere2);
+    world->light.push_back(light);
+    
 }
 
 static void addEnvironment(Group* scene, std::string filepath) {
@@ -177,17 +222,16 @@ static rt::MatLib* buildCompositeSceneMaterialLibrary() {
 
     // Base
     CombineMaterial* river = new CombineMaterial();
-    river->add(new TransmissionMaterial(0.1f, RGBColor(0.0f, 0.01f, 0.2f)), 0.2);
     river->add(new DielectricMaterial(1.333f), 0.8);
-    // river->add(new PhongMaterial(new ImageTexture("models/textures/Water_001_COLOR.png"), 902.0f), 0.8);
-    river->add(new LambertianMaterial(new ConstantTexture(RGBColor(0, 0, 0.01)), new ConstantTexture(RGBColor(0.0f, 0.2f, 0.5f))), 0.05);
+    river->add(new PhongMaterial(colorTexture(5 * white()), 902.0f), 0.8);
+    river->add(new LambertianMaterial(new ConstantTexture(RGBColor(0, 0, 0.01)), new ConstantTexture(RGBColor(0.0f, 0.2f, 0.5f))), 0.1);
     // Material* river = new DielectricMaterial(1.33);
 
     LambertianMaterial* riverBed = new LambertianMaterial(blacktexture(), 
                                             colorTexture(RGBColor(0.52, 0.12, 0.05))); 
     
     ImageTexture* groundTexture = new ImageTexture("models/textures/snow_03_diff_1k.png");
-    LambertianMaterial* ground = new LambertianMaterial(blacktexture(), groundTexture); 
+    LambertianMaterial* ground = new LambertianMaterial(colorTexture(RGBColor(0.02, 0.02, 0.02)), groundTexture);
 
     ImageTexture* blendTexture = new ImageTexture("models/textures/brick_wall_001_diffuse_1k.png");
     LambertianMaterial* riverBedGroundBlend = new LambertianMaterial(blacktexture(), blendTexture);
@@ -229,18 +273,20 @@ static rt::MatLib* buildCompositeSceneMaterialLibrary() {
 }
 
 static void addGround(Group* scene, MatLib* lib) {
-    ImageNormalMapper* snowNormal = new ImageNormalMapper(new ImageTexture("models/normals/snow_03_nor_dx_1k.png"), 2.0f);
+    ImageNormalMapper* snowNormal = new ImageNormalMapper(new ImageTexture("models/normals/snow_03_nor_dx_1k.png"), 3.5f);
     Quad* ground = new Quad(Point(50, -3.2, -0.2), Vector(-100, 0, 0), Vector(0, 0, 50), 
-                    new QuadMapper(Vector::rep(0.0f), Vector::rep(1.0f)), 
+                    new QuadMapper(Vector::rep(-1.0f)), 
                     lib->find("Ground")->second);
     ground->setNormalMapper(snowNormal);
     scene->add(ground);
 }
 
 static void addRiver(Group* scene, MatLib* lib) {
+    ImageNormalMapper* riverNormal = new ImageNormalMapper(new ImageTexture("models/normals/Water_001_NORM.png"), 3.0f);
     Quad* river = new Quad(Point(50, -3.4, -40), Vector(-100, 0, 0), Vector(0, 0, 40), 
-                    new QuadMapper(Vector::rep(0.0f), Vector(1.0f/1024.0f, 1.f/1024.0f, 1.f/1024.0f)), 
+                    new QuadMapper(Vector::rep(-1.0f), Vector(5.0f, 5.f, 5.f)), 
                     lib->find("River")->second);
+    river->setNormalMapper(riverNormal);
     scene->add(river);
 }
 
@@ -248,18 +294,26 @@ static void addRiver(Group* scene, MatLib* lib) {
 static void addLightCubes(World* world, Group* scene) {
 
     // Around and in the middle of temple
-    addLightCube(world, scene, Point(6.48569, 16.063, 27.9291), 2);
-    addLightCube(world, scene, Point(29.391, -2.5, 42.461), 2);
-    addLightCube(world, scene, Point(-10.393, -2.5, 42.461), 2);
-    addLightCube(world, scene, Point(-10.393, -2.5, 14.081), 2);
-    addLightCube(world, scene, Point(29.391, -2.5, 14.081), 2);
+    addLightCube(world, scene, Point(6.48569, 16.063, 27.9291), 2, 50.0f);
+    addLightCube(world, scene, Point(29.391, -2.0, 42.461), 2);
+    addLightCube(world, scene, Point(-10.393, -2.0, 42.461), 2);
+    addLightCube(world, scene, Point(-10.393, -2.0, 14.081), 2);
+    addLightCube(world, scene, Point(29.391, -2.0, 14.081), 2);
 
     // Upper stairs of temple
     addLightCube(world, scene, Point(6.48569, 27.893, 27.9291), 1, 50.0f);
     addLightCube(world, scene, Point(6.48569, 36.893, 27.9291), 1, 50.0f);
 
     // Above river
-    addLightCube(world, scene, Point(5, 0, -24), 2, 20.0f, true);
+
+    RGBColor lightColors[] = {yellowishOrange(), pink(), lampblue(), lampgreen()};
+    RGBColor sphereColors[] = {orange(), purple(), bluecolor(), green()};
+    float xs[] = {25, 20, 15, 10, 5, 0, -5, -10, -15, -20};
+    float factor = (1.0f / 45.0f);
+    for (int i = 0; i < 10; i++) {
+        addSpotLight(world, scene, Point(xs[i], -1 + 5 * std::sin(rt::pi * std::abs(xs[i] * factor)), -22.3),
+                    1, 50.0f, lightColors[i % 4], sphereColors[i % 4]);
+    }
 }
 
 
@@ -271,7 +325,8 @@ static void addExtraLights(World* world, Point sceneCenter, float height) {
     world->light.push_back(light2);
 
     // Spotlight from street lamp
-    world->light.push_back(new SpotLight(Point(-6.5849 , 2.9899, -6.4602f), Vector(0, -1, 0), rt::pi / 3, 0.3f, 150 * streetlampblue()));
+    // world->light.push_back(new SpotLight(Point(-6.5849 , 2.9899, -6.4602f), Vector(0, -1, 0), rt::pi / 3, 0.3f, 150 * streetlampblue()));
+    world->light.push_back(new SpotLight(Point(-11.5295 , 3.9951, -6.9007f), Vector(0, -1, 0), rt::pi / 3, 0.3f, 150 * streetlampblue()));
 }
 
 static void addNormalMaps(rt::ObjLib* objlib) {
@@ -298,6 +353,7 @@ static void renderCompositeScene(int size, int samples, int recursionDepth, std:
     rt::ObjLib* objlib2 =  loadOBJ(scene, "models/", "temple.obj", lib);
 
     addNormalMaps(objlib1);
+    // CG_UNUSED(objlib1);
     CG_UNUSED(objlib2);
 
     addGround(scene, lib);
@@ -350,5 +406,5 @@ static void renderCompositeScene(int size, int samples, int recursionDepth, std:
 }
 
 void a_competition() {
-    renderCompositeScene(600, 16, 6, "competition.exr");
+    renderCompositeScene(480, 100, 30, "competition_SD.exr");
 }

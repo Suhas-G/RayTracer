@@ -24,8 +24,8 @@ namespace rt {
             }
         }
 
-    MultiThreadedRenderer::MultiThreadedRenderer(Camera* cam, Integrator* integrator)
-        : cam(cam), integrator(integrator), samples(1)
+    MultiThreadedRenderer::MultiThreadedRenderer(Camera* cam, Integrator* integrator, int maxThreads)
+        : cam(cam), integrator(integrator), samples(1), maxThreads(maxThreads)
     {}
 
 
@@ -42,7 +42,11 @@ namespace rt {
 
         std::vector<std::tuple<float, float, rt::uint, rt::uint>> pixelsToSample = std::vector<std::tuple<float, float, rt::uint, rt::uint>>(verticalSamples * horizontalSamples * width * height);
         std::vector<RGBColor> colors = std::vector<RGBColor>(verticalSamples * horizontalSamples * width * height);
-        uint64_t noOfThreads = std::thread::hardware_concurrency();
+        uint64_t noOfThreads = maxThreads;
+        if (noOfThreads == 0) {
+            noOfThreads = std::thread::hardware_concurrency();
+        }
+        
         std::cout << "No of threads: " << noOfThreads << std::endl;
         std::vector<std::thread> threads;
         uint64_t count = 0;
