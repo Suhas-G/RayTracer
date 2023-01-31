@@ -389,7 +389,7 @@ static void renderCompositeScene(int size, int samples, int recursionDepth, std:
     
     RecursiveRayTracingIntegrator integrator(&world);
     integrator.setRecursionDepth(recursionDepth);
-    MultiThreadedRenderer engine(&cam, &integrator, 6);
+    MultiThreadedRenderer engine(&cam, &integrator);
     engine.setSamples(samples);
 
 
@@ -406,5 +406,5 @@ static void renderCompositeScene(int size, int samples, int recursionDepth, std:
 }
 
 void a_competition() {
-    renderCompositeScene(480, 4, 6, "competition.exr");
+    renderCompositeScene(1280, 100, 30, "competition.exr");
 }
